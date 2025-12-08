@@ -93,7 +93,7 @@ for thetas,math.rad(90),math.rad(0.125) do
         projvy = projv*math.sin(projang)
         projx = projx + projvx
         projy = projy + projvy
-        projvy = projvy+g
+        projvy = projvy+gravity
         projvx = projvx*(Cd*math.cos(projang))
         projvy = projvy*(Cd*math.sin(projang))
         projv = math.sqrt(projvy^2+projvx^2)
