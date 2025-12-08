@@ -1,5 +1,9 @@
 --Objective: calculate an artillery trajectory to a target inputted into the terminal
 --this requires a gps constellation already set up
+--CONNECT AZIMUTH TO RIGHT
+--CONNECT ELEVATION TO LEFT
+--CONNECT FIRING TO TOP
+--this assumes you have an autoloader that resets the angle after each shot and that it takes 5 seconds to go
 math = require("math")
 print("Scanning for data file")
 if fs.exists("/data/artillery.txt") then
@@ -47,3 +51,19 @@ datafile:write(v+"\n")
 datafile:close()
 print("Datafile generated and data stored")
 ::datadone::
+azimuth = peripheral.wrap("right")
+elevation = peripheral.wrap("left")
+fire = peripheral.wrap("top")
+print("System ready")
+::systemready::
+print("Please input the co-ordinates of the target")
+print("X")
+tx = read().tonumber()
+print("Y")
+ty = read().tonumber()
+print("Z")
+tz = read().tonumber()
+tvx = tx-x
+tvy = ty-y
+tvz = tz-z
+print("Vector from cannon elevation actuation point to target: ")
