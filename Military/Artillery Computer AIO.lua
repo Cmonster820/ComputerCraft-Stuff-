@@ -53,8 +53,8 @@ datafile:write(v+"\n")
 datafile:close()
 print("Datafile generated and data stored")
 ::datadone::
-azimuth = peripheral.wrap("right")
-elevation = peripheral.wrap("left")
+azimuth = peripheral.wrap("Create_SequencedGearshift_1")
+elevation = peripheral.wrap("Create_SequencedGearshift_0")
 print("System ready")
 ::systemready::
 print("Please input the co-ordinates of the target")
