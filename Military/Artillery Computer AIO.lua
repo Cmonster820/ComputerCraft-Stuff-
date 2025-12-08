@@ -75,7 +75,7 @@ print("Trajectory projected to 2 dimensions")
 theta = 0
 gravity = -1 --(I think this is blocks/tick/tick idk)
 Cd = 0.99 --velocity remaining after each tick (%)
-for thetas,math.rad(90),math.rad(0.125) do
+for thetas=0,math.rad(90),math.rad(0.125) do
     startx = math.cos(thetas)*length
     starty = math.sin(thetas)*length
     oldendx = 0
