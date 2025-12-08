@@ -5,6 +5,7 @@
 --CONNECT FIRING TO TOP
 --ENSURE THAT POSITIVE AZIMUTH IS COUNTERCLOCKWISE AND THAT POSITIVE ELEVATION IS UP
 --this assumes you have an autoloader that resets the angle after each shot and that it takes 5 seconds to go
+--SET UP AZIMUTH WITH 8:1 RATIO
 math = require("math")
 print("Scanning for data file")
 if fs.exists("/data/artillery.txt") then
@@ -98,6 +99,7 @@ for thetas,90,0.125 do
         projvy = projvy*(Cd*math.sin(projang))
         projv = math.sqrt(projvy^2+projvx^2)
         projang = math.arctan(projvy/projvx)
+        print("vx: "..projvx.." vy: "..projvy.." x: "..projx.." y: "..projy.." v: "..projv.." θp: "..projang.." θ: "..thetas)
         if projx>=dist then
             endx=projx
             break
@@ -109,12 +111,21 @@ for thetas,90,0.125 do
     end
     if (endx==dist and endy == tvy) then
         theta = thetas
+        print("Firing solution found for θ = "..theta)
         break
     end
     if (dist-oldendx<dist-endx and tvy-oldendy<tvy-endy) then
         theta = prevthetas
+        print("Firing solution found for θ = "..theta)
         break
     end
     oldendy = endy
     oldendx = endx
+end
+print("Calculating φ")
+phi = 0
+if tvx>0 then
+    phi = math.arctan(tvz/tvx)
+else
+    phi = math.arc
 end
