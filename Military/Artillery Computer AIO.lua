@@ -34,14 +34,16 @@ print("What is the length of the cannon's barrel?")
 length = read().tonumber()
 v = 0
 print("How many brass cartridge thingies are in use?")
-v+=read().tonumber()*
+v+=read().tonumber()*120
 print("How many powder things are in use")
-v+=read().tonumber()*
+v+=read().tonumber()*40
 print("Understood. Writing data to file.")
 datafile = io.open("/data/artillery.txt","a")
 datafile:write(x+"\n")
 datafile:write(y+"\n")
 datafile:write(z+"\n")
+datafile:write(length+"\n")
+datafile:write(v+"\n")
 datafile:close()
 print("Datafile generated and data stored")
 ::datadone::
