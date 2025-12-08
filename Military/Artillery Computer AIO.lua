@@ -55,7 +55,6 @@ print("Datafile generated and data stored")
 ::datadone::
 azimuth = peripheral.wrap("right")
 elevation = peripheral.wrap("left")
-fire = peripheral.wrap("top")
 print("System ready")
 ::systemready::
 print("Please input the co-ordinates of the target")
@@ -76,7 +75,7 @@ print("Trajectory projected to 2 dimensions")
 theta = 0
 gravity = -1 --(I think this is blocks/tick/tick idk)
 Cd = 0.99 --velocity remaining after each tick (%)
-for thetas,90,0.125 do
+for thetas,math.rad(90),math.rad(0.125) do
     startx = math.cos(thetas)*length
     starty = math.sin(thetas)*length
     oldendx = 0
@@ -111,12 +110,12 @@ for thetas,90,0.125 do
     end
     if (endx==dist and endy == tvy) then
         theta = thetas
-        print("Firing solution found for θ = "..theta)
+        print("Firing solution found for θ = "..math.deg(theta))
         break
     end
     if (dist-oldendx<dist-endx and tvy-oldendy<tvy-endy) then
         theta = prevthetas
-        print("Firing solution found for θ = "..theta)
+        print("Firing solution found for θ = "..math.deg(theta).."\nNOTE: Firing solution not exact")
         break
     end
     oldendy = endy
@@ -127,5 +126,24 @@ phi = 0
 if tvx>0 then
     phi = math.arctan(tvz/tvx)
 else
-    phi = math.arc
+    phi = math.arctan(tvz/tvx)+math.rad(180)
 end
+if phi<0 then
+    phi = phi+math.rad(360)
+end
+print("φ = "..math.deg(phi))
+print("Firing solution (φ,θ): ("..phi..","..theta..")")
+print("Aiming.")
+azimuth.rotate(8*math.deg(phi))
+elevation.rotate(8*math.deg(theta))
+while azimuth.isRunning() and elevation.isRunning do
+    os.sleep(0.1)
+end
+print("Aiming Complete, firing")
+redstone.setOutput("top",1)
+os.sleep(1)
+redstone.setOutput("top",0)
+print("Firing Complete, awaiting autoloading")
+os.sleep(10)
+print("Autoloading timer complete, ready for reuse")
+goto systemready
