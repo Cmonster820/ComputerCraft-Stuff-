@@ -3,6 +3,7 @@
 --CONNECT AZIMUTH TO RIGHT
 --CONNECT ELEVATION TO LEFT
 --CONNECT FIRING TO TOP
+--ENSURE THAT POSITIVE AZIMUTH IS COUNTERCLOCKWISE AND THAT POSITIVE ELEVATION IS UP
 --this assumes you have an autoloader that resets the angle after each shot and that it takes 5 seconds to go
 math = require("math")
 print("Scanning for data file")
@@ -66,4 +67,7 @@ tz = read().tonumber()
 tvx = tx-x
 tvy = ty-y
 tvz = tz-z
-print("Vector from cannon elevation actuation point to target: ")
+print("Vector from cannon elevation actuation point to target:〈"..tvx..","..tvy..","..tvz.."〉")
+print("Beginning simulation")
+dist = math.ceil(math.sqrt(tvx^2+tvz^2))
+print("Distance: "..dist.." blocks, rounded to nearest integer")
