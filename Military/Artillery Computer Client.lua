@@ -1,0 +1,1 @@
+--for pocket computers or whatever they're called, requires wireless or ender modem
