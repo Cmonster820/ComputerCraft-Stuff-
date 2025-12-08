@@ -134,8 +134,8 @@ end
 print("φ = "..math.deg(phi))
 print("Firing solution (φ,θ): ("..phi..","..theta..")")
 print("Aiming.")
-azimuth.rotate(8*math.deg(phi))
-elevation.rotate(8*math.deg(theta))
+azimuth.rotate(math.round(8*math.deg(phi)))
+elevation.rotate(math.round(8*math.deg(theta)))
 while azimuth.isRunning() and elevation.isRunning do
     os.sleep(0.1)
 end
