@@ -39,9 +39,9 @@ print("What is the length of the cannon's barrel?")
 length = read().tonumber()
 v = 0
 print("How many brass cartridge thingies are in use?")
-v+=read().tonumber()*120
+v=read().tonumber()*120+v
 print("How many powder things are in use")
-v+=read().tonumber()*40
+v=read().tonumber()*40+v
 print("Understood. Writing data to file.")
 datafile = io.open("/data/artillery.txt","a")
 datafile:write(x+"\n")
@@ -71,3 +71,50 @@ print("Vector from cannon elevation actuation point to target:〈"..tvx..","..tv
 print("Beginning simulation")
 dist = math.ceil(math.sqrt(tvx^2+tvz^2))
 print("Distance: "..dist.." blocks, rounded to nearest integer")
+print("Trajectory projected to 2 dimensions")
+theta = 0
+gravity = -1 --(I think this is blocks/tick/tick idk)
+Cd = 0.99 --velocity remaining after each tick (%)
+for thetas,90,0.125 do
+    startx = math.cos(thetas)*length
+    starty = math.sin(thetas)*length
+    oldendx = 0
+    oldendy = 0
+    endx = 0
+    endy = 0
+    projx = startx
+    projy = starty
+    projv = v
+    prevprojy = starty
+    prevthetas = thetas-0.125
+    projang = theta
+    while true do
+        projvx = projv*math.cos(projang)
+        projvy = projv*math.sin(projang)
+        projx = projx + projvx
+        projy = projy + projvy
+        projvy = projvy+g
+        projvx = projvx*(Cd*math.cos(projang))
+        projvy = projvy*(Cd*math.sin(projang))
+        projv = math.sqrt(projvy^2+projvx^2)
+        projang = math.arctan(projvy/projvx)
+        if projx>=dist then
+            endx=projx
+            break
+        end
+        if projy<=tvy and projx>=dist then
+            endy=projy
+            break
+        end
+    end
+    if (endx==dist and endy == tvy) then
+        theta = thetas
+        break
+    end
+    if (dist-oldendx<dist-endx and tvy-oldendy<tvy-endy) then
+        theta = prevthetas
+        break
+    end
+    oldendy = endy
+    oldendx = endx
+end
