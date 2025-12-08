@@ -1,0 +1,1 @@
+--Objective: make an artificial horizon display thingy like that one screen in carrier command 2
