@@ -152,19 +152,13 @@ function wrapPages(str)
     local numlines = numnewlines+1
     local curStr = ""
     local count = 1
-    local countpages = 1
-    p.setPageTitle(os.date()+countpages)
+    local pages = {}
     for line in str:gmatch("([^\n]*)\n?") do
         count = count+1
         if count>h then
-            p.write(curStr)
+            pages:insert(curStr)
             curStr=""
             count = 1
-            if not p.newPage() then
-                error("Insufficient ink or paper")
-            end
-            countpages=countpages+1
-            p.setPageTitle(os.date()+countpages)
         end
         if #curStr==0 then
             curStr = line
@@ -172,6 +166,7 @@ function wrapPages(str)
             curStr = curStr.."\n"..line
         end
     end
+    return pages
 end
 function printMD(str)
 end
@@ -183,7 +178,17 @@ function parseMessage(message,from)
     end
     if message.fileExtension~=".md" then
         local str = wrapParse(message.data)
-        wrapPages(str)
+        local pages = wrapPages(str)
+        local pcount = 1
+        for _,page in ipairs(pages) do
+            if not p.newPage() then
+                repeat
+                    print("Insufficient paper or ink")
+                until p.newPage()
+            end
+            p.setPageTitle(os.date().." "..pcount)
+            p.write(page)
+        end
     else
         printMD(message.data)
     end
