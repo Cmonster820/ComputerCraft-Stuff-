@@ -137,12 +137,12 @@ for thetas=0,math.rad(90),math.rad(0.125) do
     if (oldendx<dist and dist<endx) then
         if (dist-oldendx<dist-endx and tvy-oldendy<tvy-endy) then
             theta = prevthetas
-            print("Firing solution found for θ = "..math.deg(theta).."\nNOTE: Firing solution not exact")
+            print("Firing solution found for θ = "..math.deg(theta).."\nWARNING: Firing solution not exact")
             break
         end
         if (dist-oldendx>dist-endx and tvy-oldendy>tvy-endy) then
             theta = thetas
-            print("Firing solution found for θ = "..math.deg(theta).."\nNOTE: Firing solution not exact")
+            print("Firing solution found for θ = "..math.deg(theta).."\nWARNING: Firing solution not exact")
             break
         end
     end
