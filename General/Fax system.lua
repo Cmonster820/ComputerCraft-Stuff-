@@ -12,7 +12,7 @@ primarch = rednet.lookup("FAXADMN","Primarch")
 packet = 
 {
     Destination = "",
-    From = "",
+    From = name,
     DestID = 0,
     FromID = ID,
     message = "",
@@ -22,10 +22,25 @@ function sendFile(dest,destn)
     print("Understood, please type the file path:\n")
     local input = read()
     print("You have selected: "..input.."\nI would ask if this is correct but I don't want to write another confirmation thing so here we go")
-    local tablething = {}
+    local extensionparser = {}
     for thing in string.gmatch(input,"([^%.]+)") do
-        table.
+        table.insert(extensionparser,thing)
     end
+    local extension = extensionparser[2]
+    print("Extension isolated: "..extension)
+    print("Constructing packet...")
+    packet.Destination = destn
+    packet.DestID = dest
+    local file = io.open(input,"r")
+    packet.message = file:read("*a")
+    file:close()
+    packet.fileExtension = extension
+    rednet.send(dest,textutils.serialize(packet),"FAX")
+    rednet.send(primarch,textutils.serialize(packet),"FAXADMN")
+    packet.fileExtension = ""
+    packet.message = ""
+    packet.destID = 0
+    packet.Destination = ""
 end
 function main()
     local selected = false
