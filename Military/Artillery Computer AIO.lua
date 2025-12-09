@@ -1,5 +1,4 @@
 --Objective: calculate an artillery trajectory to a target inputted into the terminal
---this requires a gps constellation already set up
 --CONNECT AZIMUTH TO RIGHT
 --CONNECT ELEVATION TO LEFT
 --CONNECT FIRING TO TOP
