@@ -1,5 +1,5 @@
 --for pocket computers or whatever they're called, requires wireless or ender modem version, requires advanced version for touchscreen
-g = require("gui")
+g = require("graphbasic")
 h,w = term.native().getSize()
 artyPacket = 
 {
