@@ -54,6 +54,7 @@ function sendFile(dest,destn)
     packet.Destination = ""
 end
 function typeThing(dest,destn)
+    ::redotype::
     print("You have selected:\nType message")
     print("The message will be terminated with the word \"STOP\" in all caps on its own line")
     local strOut = ""
@@ -65,7 +66,27 @@ function typeThing(dest,destn)
             done = true
         end
     until done
-    print("The message is:\n"..strOut.."\nIs this correct?")
+    ::reconf4::
+    print("The message is:\n"..strOut.."\nIs this correct?(Y/N)")
+    local input = read()
+    if input == "N" then
+        print("Understood.")
+        goto redotype
+    elseif input~="Y" then
+        print("Invalid response, please input either Y or N")
+        goto reconf4
+    end
+    packet.message = strOut
+    packet.Destination = destn
+    packet.destID = dest
+    packet.fileExtension = "N/A"
+    rednet.send(primarch,textutils.serialize(packet),"FAXADMN")
+    rednet.send(dest,textutils.serialize(packet),"FAX")
+    packet.message = ""
+    packet.Destination = ""
+    packet.destID = 0
+    packet.fileExtension = ""
+    print("Message sent")
 end
 function main()
     local selected = false
