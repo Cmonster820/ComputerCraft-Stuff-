@@ -129,7 +129,30 @@ function main()
         goto reconf2
     end
 end
+function wrapParse(str)
+    local countChar = 0
+    for i=1,#str-1 do
+        if str:sub(i,i+1)=="\n" then
+            countChar = 0
+        else
+            countChar = countChar+1
+        end
+    end
+end
 function parseMessage(message,from)
+    message = textutils.unserialize(message)
+    print(("Got a message from %d"):format(from))
+    if not p.newPage() then
+        error("Insufficient ink or paper")
+    end
+    if message.fileExtension~=".md" then
+        local str = wrapParse(message.data)
+        local _,numnewlines = string.gsub(str,"\n")
+        local numlines = numnewlines+1
+
+    else
+        parseMD(message.data)
+    end
 end
 function listener()
 end
