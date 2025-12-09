@@ -115,14 +115,17 @@ for thetas=0,math.rad(90),math.rad(0.125) do
         print("vx: "..projvx.."\nvy: "..projvy.."\nx: "..projx.."\ny: "..projy.."\nv: "..projv.."\nThetap: "..projang.."\nTheta: "..thetas.."\n")
         if projx>=dist then
             endx=projx
+            exdy=projy
             break
         end
         if projy<=tvy then
             endy=projy
+            endx=projx
             break
         end
         if projy>=maxheight then
             endy=projy
+            endx=projx
             break
         end
     end
