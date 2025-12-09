@@ -133,6 +133,40 @@ function wrapParse(str)
     local lines = {}
     for line in str:gmatch("([^\n]*)\n?") do
         local curline = ""
+        for word in line:gmatch("(%S+)") do
+            if #curline+#word+(#curline>0 and 1 or 0)>w then
+                lines:insert(curline)
+            else
+                if #curline==0 then
+                    curline = word
+                else
+                    curline = curline.." "..word
+                end
+            end
+        end
+    end
+    return lines:concat("\n")
+end
+function wrapPages(str)
+    local _,numnewlines = string.gsub(str,"\n")
+    local numlines = numnewlines+1
+    curStr = ""
+    count = 1
+    for line in str:gmatch("([^\n]*)\n?") do
+        count = count+1
+        if count>h then
+            p.write(curStr)
+            curStr=""
+            count = 1
+            if not p.newPage() then
+                error("Insufficient ink or paper")
+            end
+        end
+        if #curStr==0 then
+            curStr = line
+        else
+            curStr = curStr.."\n"..line
+        end
     end
 end
 function parseMessage(message,from)
@@ -143,11 +177,9 @@ function parseMessage(message,from)
     end
     if message.fileExtension~=".md" then
         local str = wrapParse(message.data)
-        local _,numnewlines = string.gsub(str,"\n")
-        local numlines = numnewlines+1
-
+        wrapPages(str)
     else
-        parseMD(message.data)
+        printMD(message.data)
     end
 end
 function listener()
