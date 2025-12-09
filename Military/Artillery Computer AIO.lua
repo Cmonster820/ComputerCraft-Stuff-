@@ -78,7 +78,7 @@ tz = tonumber(read())
 tvx = tx-x
 tvy = ty-y
 tvz = tz-z
-print("Vector from cannon elevation actuation point to target:〈"..tvx..","..tvy..","..tvz.."〉")
+print("Vector from cannon elevation actuation point to target: \u27E8"..tvx..","..tvy..","..tvz.."\u27E9")
 print("Beginning simulation")
 dist = math.ceil(math.sqrt(tvx^2+tvz^2))
 print("Distance: "..dist.." blocks, rounded to nearest integer")
