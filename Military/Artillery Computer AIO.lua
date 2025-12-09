@@ -78,7 +78,7 @@ tz = tonumber(read())
 tvx = tx-x
 tvy = ty-y
 tvz = tz-z
-print("Vector from cannon elevation actuation point to target: \u27E8"..tvx..","..tvy..","..tvz.."\u27E9")
+print("Vector from cannon elevation actuation point to target: \u{27E8}"..tvx..","..tvy..","..tvz.."\u{27E9}")
 print("Beginning simulation")
 dist = math.ceil(math.sqrt(tvx^2+tvz^2))
 print("Distance: "..dist.." blocks, rounded to nearest integer")
@@ -110,7 +110,7 @@ for thetas=0,math.rad(90),math.rad(0.125) do
         projvy = projvy*(Cd*math.abs(math.sin(projang)))
         projv = math.sqrt(projvy^2+projvx^2)
         projang = math.atan(projvy/projvx)
-        print("vx: "..projvx.."\nvy: "..projvy.."\nx: "..projx.."\ny: "..projy.."\nv: "..projv.."\n\u03b8p: "..projang.."\n\u03b8: "..thetas.."\n")
+        print("vx: "..projvx.."\nvy: "..projvy.."\nx: "..projx.."\ny: "..projy.."\nv: "..projv.."\n\u{03b8}p: "..projang.."\n\u{03b8}: "..thetas.."\n")
         if projx>=dist then
             endx=projx
             exdy=projy
@@ -129,25 +129,25 @@ for thetas=0,math.rad(90),math.rad(0.125) do
     end
     if (endx==dist and endy == tvy) then
         theta = thetas
-        print("Firing solution found for \u03b8 = "..math.deg(theta))
+        print("Firing solution found for \u{03b8} = "..math.deg(theta))
         break
     end
     if (oldendx<dist and dist<endx) then
         if (dist-oldendx<dist-endx and tvy-oldendy<tvy-endy) then
             theta = prevthetas
-            print("Firing solution found for \u03b8 = "..math.deg(theta).."\nWARNING: Firing solution not exact")
+            print("Firing solution found for \u{03b8} = "..math.deg(theta).."\nWARNING: Firing solution not exact")
             break
         end
         if (dist-oldendx>dist-endx and tvy-oldendy>tvy-endy) then
             theta = thetas
-            print("Firing solution found for \u03b8 = "..math.deg(theta).."\nWARNING: Firing solution not exact")
+            print("Firing solution found for \u{03b8} = "..math.deg(theta).."\nWARNING: Firing solution not exact")
             break
         end
     end
     oldendy = endy
     oldendx = endx
 end
-print("Calculating \u03d6")
+print("Calculating \u{03d6}")
 phi = 0
 if tvx>0 then
     phi = math.atan(tvz/tvx)
@@ -157,8 +157,8 @@ end
 if phi<0 then
     phi = phi+math.rad(360)
 end
-print("\u03d6 = "..math.deg(phi))
-print("Firing solution (\u03d6,\u03b8): ("..math.deg(phi)..","..math.deg(theta)..")")
+print("\u{03d6} = "..math.deg(phi))
+print("Firing solution (\u{03d6},\u{03b8}): ("..math.deg(phi)..","..math.deg(theta)..")")
 print("Aiming.")
 azimuth.rotate(math.floor(8*math.deg(phi)),2)
 elevation.rotate(math.floor(8*math.deg(theta)),2)
