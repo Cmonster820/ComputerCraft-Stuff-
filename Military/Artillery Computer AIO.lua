@@ -86,7 +86,7 @@ print("Distance: "..dist.." blocks, rounded to nearest integer")
 print("Trajectory projected to 2 dimensions")
 theta = 0
 gravity = -1 --(I think this is blocks/tick/tick idk)
---calulate maximum height
+--calulate maximum height using air resistanceless math
 maxheight = ((v*math.sin(1/2*math.asin((dist*20*gravity)/(v^2))))^2)/(2*20*gravity)
 Cd = 0.99 --velocity remaining after each tick (%)
 oldendx = 0
