@@ -6,6 +6,7 @@
 --ENSURE THAT POSITIVE AZIMUTH IS COUNTERCLOCKWISE AND THAT POSITIVE ELEVATION IS UP
 --this assumes you have an autoloader that resets the angle after each shot and that it takes 5 seconds to go
 --SET UP AZIMUTH WITH 8:1 RATIO
+--^^^^^ might already be that way
 math = require("math")
 function round(n)
     if math.ceil(n)-n>math.abs(math.floor(n)) then
