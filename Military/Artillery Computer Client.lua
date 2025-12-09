@@ -45,4 +45,5 @@ end
 datafile = io.open("/data/artillery.txt","w")
 datafile:write(host.."\n")
 datafile:write(hostID.."\n")
+datafile:close()
 ::datadone::
