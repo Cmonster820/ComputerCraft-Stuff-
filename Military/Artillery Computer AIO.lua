@@ -1,6 +1,5 @@
 --Objective: calculate an artillery trajectory to a target inputted into the terminal
---CONNECT AZIMUTH TO RIGHT
---CONNECT ELEVATION TO LEFT
+--CONNECT ELEVATION TO MODEM FIRST, THEN AZIMUTH
 --CONNECT FIRING TO TOP
 --ENSURE THAT POSITIVE AZIMUTH IS COUNTERCLOCKWISE AND THAT POSITIVE ELEVATION IS UP
 --this assumes you have an autoloader that resets the angle after each shot and that it takes 5 seconds to go
