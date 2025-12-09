@@ -42,9 +42,20 @@ function main()
             destn = message
         else
             print("Invalid response, retrying")
+            goto reconfirm
         end
     end
-    
+    ::reconf2::
+    print("Would you like to send a file or type a message? (1/2)")
+    local input = read()
+    if input == "1" then
+        sendFile(dest,destn)
+    elseif input == "2" then
+        typeThing(dest,destn)
+    else
+        print("invalid")
+        goto reconf2
+    end
 end
 function parseMessage(message,from)
 end
