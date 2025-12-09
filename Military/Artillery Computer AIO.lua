@@ -163,7 +163,7 @@ print("Firing solution (\u03d6,\u03b8): ("..phi..","..theta..")")
 print("Aiming.")
 azimuth.rotate(math.floor(8*math.deg(phi)),2)
 elevation.rotate(math.floor(8*math.deg(theta)),2)
-while azimuth.isRunning() and elevation.isRunning do
+while azimuth.isRunning() and elevation.isRunning() do
     os.sleep(0.1)
 end
 print("Aiming Complete, firing")
