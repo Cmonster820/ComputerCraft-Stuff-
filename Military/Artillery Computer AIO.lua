@@ -99,7 +99,6 @@ for thetas=0,math.rad(90),math.rad(0.125) do
     projx = startx
     projy = starty
     projv = v
-    prevprojy = starty
     prevthetas = thetas-0.125
     projang = thetas
     while true do
