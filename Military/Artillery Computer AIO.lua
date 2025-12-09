@@ -112,7 +112,7 @@ for thetas=0,math.rad(90),math.rad(0.125) do
         projvy = projvy*(Cd*math.abs(math.sin(projang)))
         projv = math.sqrt(projvy^2+projvx^2)
         projang = math.atan(projvy/projvx)
-        print("vx: "..projvx.."\nvy: "..projvy.."\nx: "..projx.."\ny: "..projy.."\nv: "..projv.."\nThetap: "..projang.."\nTheta: "..thetas.."\n")
+        print("vx: "..projvx.."\nvy: "..projvy.."\nx: "..projx.."\ny: "..projy.."\nv: "..projv.."\n\u03b8p: "..projang.."\n\u03b8: "..thetas.."\n")
         if projx>=dist then
             endx=projx
             exdy=projy
