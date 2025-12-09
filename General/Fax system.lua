@@ -19,9 +19,20 @@ packet =
     fileExtension = ""
 }
 function sendFile(dest,destn)
+    ::reconf3::
     print("Understood, please type the file path:\n")
     local input = read()
-    print("You have selected: "..input.."\nI would ask if this is correct but I don't want to write another confirmation thing so here we go")
+    ::fixconf::
+    print("You have selected: "..input.."\nIs this correct? (Y/N)")
+    local conf = read()
+    if conf == "N" then
+        goto reconf3
+    elseif conf == "Y" then
+        print("Understood")
+    else
+        print("Invalid response, please respond with either Y or N")
+        goto reconf3
+    end
     local extensionparser = {}
     for thing in string.gmatch(input,"([^%.]+)") do
         table.insert(extensionparser,thing)
@@ -41,6 +52,20 @@ function sendFile(dest,destn)
     packet.message = ""
     packet.destID = 0
     packet.Destination = ""
+end
+function typeThing(dest,destn)
+    print("You have selected:\nType message")
+    print("The message will be terminated with the word \"STOP\" in all caps on its own line")
+    local strOut = ""
+    local done = false
+    repeat
+        local input = read()
+        strOut = strOut.."\n"..input
+        if input=="STOP" then
+            done = true
+        end
+    until done
+    print("The message is:\n"..strOut.."\nIs this correct?")
 end
 function main()
     local selected = false
@@ -65,6 +90,7 @@ function main()
             selected = true
             dest = input
             destn = message
+            break
         else
             print("Invalid response, retrying")
             goto reconfirm
