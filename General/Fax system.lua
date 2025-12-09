@@ -150,8 +150,10 @@ end
 function wrapPages(str)
     local _,numnewlines = string.gsub(str,"\n")
     local numlines = numnewlines+1
-    curStr = ""
-    count = 1
+    local curStr = ""
+    local count = 1
+    local countpages = 1
+    p.setPageTitle(os.date()+countpages)
     for line in str:gmatch("([^\n]*)\n?") do
         count = count+1
         if count>h then
@@ -161,6 +163,8 @@ function wrapPages(str)
             if not p.newPage() then
                 error("Insufficient ink or paper")
             end
+            countpages=countpages+1
+            p.setPageTitle(os.date()+countpages)
         end
         if #curStr==0 then
             curStr = line
@@ -168,6 +172,8 @@ function wrapPages(str)
             curStr = curStr.."\n"..line
         end
     end
+end
+function printMD(str)
 end
 function parseMessage(message,from)
     message = textutils.unserialize(message)
