@@ -131,25 +131,25 @@ for thetas=0,math.rad(90),math.rad(0.125) do
     end
     if (endx==dist and endy == tvy) then
         theta = thetas
-        print("Firing solution found for θ = "..math.deg(theta))
+        print("Firing solution found for \u03b8 = "..math.deg(theta))
         break
     end
     if (oldendx<dist and dist<endx) then
         if (dist-oldendx<dist-endx and tvy-oldendy<tvy-endy) then
             theta = prevthetas
-            print("Firing solution found for θ = "..math.deg(theta).."\nWARNING: Firing solution not exact")
+            print("Firing solution found for \u03b8 = "..math.deg(theta).."\nWARNING: Firing solution not exact")
             break
         end
         if (dist-oldendx>dist-endx and tvy-oldendy>tvy-endy) then
             theta = thetas
-            print("Firing solution found for θ = "..math.deg(theta).."\nWARNING: Firing solution not exact")
+            print("Firing solution found for \u03b8 = "..math.deg(theta).."\nWARNING: Firing solution not exact")
             break
         end
     end
     oldendy = endy
     oldendx = endx
 end
-print("Calculating φ")
+print("Calculating \u03d6")
 phi = 0
 if tvx>0 then
     phi = math.atan(tvz/tvx)
@@ -159,8 +159,8 @@ end
 if phi<0 then
     phi = phi+math.rad(360)
 end
-print("φ = "..math.deg(phi))
-print("Firing solution (φ,θ): ("..phi..","..theta..")")
+print("\u03d6 = "..math.deg(phi))
+print("Firing solution (\u03d6,\u03b8): ("..phi..","..theta..")")
 print("Aiming.")
 azimuth.rotate(math.floor(8*math.deg(phi)),2)
 elevation.rotate(math.floor(8*math.deg(theta)),2)
