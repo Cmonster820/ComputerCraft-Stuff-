@@ -158,7 +158,7 @@ if phi<0 then
     phi = phi+math.rad(360)
 end
 print("\u03d6 = "..math.deg(phi))
-print("Firing solution (\u03d6,\u03b8): ("..phi..","..theta..")")
+print("Firing solution (\u03d6,\u03b8): ("..math.deg(phi)..","..math.deg(theta)..")")
 print("Aiming.")
 azimuth.rotate(math.floor(8*math.deg(phi)),2)
 elevation.rotate(math.floor(8*math.deg(theta)),2)
