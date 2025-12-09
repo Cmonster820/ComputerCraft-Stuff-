@@ -13,6 +13,13 @@ m = peripheral.find("modem")
 log = window.create(term.current(),math.round(w*0.6),2,math.round(w-math.round(w*0.6))-1,math.round(h*0.2))
 oldbg = scr.getBackgroundColor()
 oldfg = scr.getTextColor()
+if fs.exists("/data/artillery.txt") then
+    datafile = io.open("/data/artillery.txt","r+")
+    host = datafile:read("l")
+    hostID = tonumber(datafile:read("l"))
+    datafile:close()
+    goto datadone
+end
 print("What is the name of your artillery host?")
 host = read()
 main.setBackgroundColor(0xFFFFFF)
@@ -35,3 +42,7 @@ if message.data == "Allowed" then
 else
     error("Denied")
 end
+datafile = io.open("/data/artillery.txt","w")
+datafile:write(host.."\n")
+datafile:write(hostID.."\n")
+::datadone::
