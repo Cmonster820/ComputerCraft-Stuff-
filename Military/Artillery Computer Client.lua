@@ -36,9 +36,9 @@ print("Finding host")
 hostID = rednet.lookup("Arty", host)
 print("Found, Host ID: "..hostID)
 print("Connecting...")
-packet.data = "connect"
-rednet.send(hostID,textutils.serialize(packet),"arty")
-packet.data = ""
+artyPacket.data = "connect"
+rednet.send(hostID,textutils.serialize(artyPacket),"arty")
+artyPacket.data = ""
 _,message = rednet.receive("arty")
 message = textutils.unserialize(message)
 if message.data == "Allowed" then
@@ -52,6 +52,7 @@ datafile:write(hostID.."\n")
 datafile:close()
 ::datadone::
 term.redirect(main)
+term.setCursorBlink(false)
 main.setBackgroundColor(colors.red)
 main.setTextColor(colors.red)
 g.fill(w//4,h//2-1,w//4-1,3," ")
@@ -68,3 +69,62 @@ g.set(((3*w//4+1)+(w//4-1)//2)-(#label//2),h//2,label)
 label = "On my position"
 main.setBackgroundColor(colors.red)
 g.set((w//4+(w//4-1)//2)-(#label//2),h//2,label)
+mx, my
+function processMyPos()
+    term.redirect(log)
+    print("Multiple types not yet implemented")
+    x,y,z = gps.locate()
+    artyPacket.type = "St"
+    artyPacket.target = {x,y,z}
+    rednet.send(hostID,textutils.serialize(artyPacket),"arty")
+    print("sent")
+    artyPacket.target = {}
+    artyPacket.type = ""
+    term.redirect(main)
+    goto datadone
+end
+function processTypePos()
+    main.setTextColor(colors.white)
+    main.setBackgroundColor(colors.black)
+    g.fill(w//4,h//2-1,w//2,3," ")
+    term.setCursorPos(w//4+1,h//2)
+    term.setCursorBlink(true)
+    local posString = read()
+    posString = string.gsub(posString," ","")
+    local parseTable = {}
+    for n in string.gmatch(posString,"([^,]+)") do
+        table.insert(parseTable,tonumber(n))
+    end
+    artyPacket.target = parseTable
+    artyPacket.type = "St"
+    term.redirect(log)
+    print("sending command")
+    rednet.send(hostID,textutils.serialize(artyPacket),"arty")
+    artyPacket.target = {}
+    artyPacket.type = ""
+    print("sent")
+    term.redirect(main)
+end
+repeat
+    _,_,mx,my=os.pullEvent("mouse_click")
+    if not(((w//4<=mx and mx<=(w//2-1)) or (3*w//4<=mx and mx<=(w-1)))and(h//2-1<=my and my<=h//2+2)) then
+        term.redirect(log)
+        print("Invalid position")
+        term.redirect(main)
+    end
+until ((w//4<=mx and mx<=(w//2-1)) or (3*w//4<=mx and mx<=(w-1)))and(h//2-1<=my and my<=h//2+2)
+if w//4<=mx and mx<=(w//2-1) then
+    term.redirect(log)
+    print("Selected:\nOn your position\n\nwhy.")
+    term.redirect(main)
+    main.setBackgroundColor(colors.white)
+    main.clear()
+    processMyPos()
+else
+    term.redirect(log)
+    print("Please type your coordinates, in the form X,Y,Z")
+    term.redirect(main)
+    main.setBackgroundcolor(colors.white)
+    main.clear()
+    processTypePos()
+end
