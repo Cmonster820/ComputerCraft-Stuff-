@@ -15,8 +15,18 @@ packet =
     From = "",
     DestID = 0,
     FromID = ID,
-    message = ""
+    message = "",
+    fileExtension = ""
 }
+function sendFile(dest,destn)
+    print("Understood, please type the file path:\n")
+    local input = read()
+    print("You have selected: "..input.."\nI would ask if this is correct but I don't want to write another confirmation thing so here we go")
+    local tablething = {}
+    for thing in string.gmatch(input,"([^%.]+)") do
+        table.
+    end
+end
 function main()
     local selected = false
     local dest = 0
