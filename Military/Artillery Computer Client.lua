@@ -23,6 +23,8 @@ end
 print("What is the name of your artillery host?")
 host = read()
 main.setPaletteColor(colors.white,0xFFFFFF)
+main.setPaletteColor(colors.red,0xFF0000)
+main.setPaletteColor(colors.green,0x00FF00)
 main.setBackgroundColor(colors.white)
 main.setTextColor(colors.white)
 main.clear()
