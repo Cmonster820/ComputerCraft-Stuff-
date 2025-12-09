@@ -130,13 +130,9 @@ function main()
     end
 end
 function wrapParse(str)
-    local countChar = 0
-    for i=1,#str-1 do
-        if str:sub(i,i+1)=="\n" then
-            countChar = 0
-        else
-            countChar = countChar+1
-        end
+    local lines = {}
+    for line in str:gmatch("([^\n]*)\n?") do
+        local curline = ""
     end
 end
 function parseMessage(message,from)
