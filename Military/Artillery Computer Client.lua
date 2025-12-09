@@ -1,4 +1,5 @@
 --for pocket computers or whatever they're called, requires wireless or ender modem version, requires advanced version for touchscreen
+g = require("gui")
 h,w = term.native().getSize()
 artyPacket = 
 {
@@ -50,3 +51,4 @@ datafile:write(host.."\n")
 datafile:write(hostID.."\n")
 datafile:close()
 ::datadone::
+term.redirect(main)
