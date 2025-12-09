@@ -22,8 +22,9 @@ if fs.exists("/data/artillery.txt") then
 end
 print("What is the name of your artillery host?")
 host = read()
-main.setBackgroundColor(0xFFFFFF)
-main.setTextColor(0xFFFFFF)
+main.setPaletteColor(colors.white,0xFFFFFF)
+main.setBackgroundColor(colors.white)
+main.setTextColor(colors.white)
 main.clear()
 term.redirect(log)
 print("Establishing connection with host")
