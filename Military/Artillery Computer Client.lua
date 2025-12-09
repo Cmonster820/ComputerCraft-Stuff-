@@ -104,6 +104,7 @@ function processTypePos()
     artyPacket.type = ""
     print("sent")
     term.redirect(main)
+    goto datadone
 end
 repeat
     _,_,mx,my=os.pullEvent("mouse_click")
