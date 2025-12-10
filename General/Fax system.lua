@@ -181,7 +181,7 @@ function printMD(str)
     end
     local base = os.date().."\n"
     local count = 1
-    
+    --I'll finish this when my brain is more brain
 end
 function parseMessage(message,from)
     message = textutils.unserialize(message)
