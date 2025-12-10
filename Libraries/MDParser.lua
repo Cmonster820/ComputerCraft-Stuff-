@@ -61,6 +61,17 @@ function parseMD(documentStr)
                     curContainer = curContainer.parent
                     lineInd = lineInd-1
                 end
+            elseif curContainer.type = "olist" then
+                if #(line:match("^(%s*)"))==curContainer.level then
+                    curContainer = curContainer.parent
+                    lineInd = lineInd-1
+                elseif #(line:match("^(%s*)"))<curContainer.level then
+                    curContainer = curContainer.parent
+                    lineInd = lineInd-1
+                else
+                    curContainer.children:insert(AST.node("list",{content},_,curContainer,{item=#curContainer.content},{level=#(line:match("^(%s*)"))}))
+                    curContainer = curContainer.childrent[#curContainer.children]
+                end
             else
                 curContainer.children:insert(AST.node("list",{content},_,curContainer,{item=#curContainer.content},{level = #(line:match("^(%s*)"))}))
                 curContainer = curContainer.children[#curContainer.children]
@@ -81,7 +92,20 @@ function parseMD(documentStr)
                     curContainer = curContainer.parent
                     lineInd = lineInd-1
                 end
-            elseif curContainer then
+            elseif curContainer.type = "list" then
+                if #(line:match("^(%s*)"))==curContainer.level then
+                    curContainer = curContainer.parent
+                    lineInd = lineInd-1
+                elseif #(line:match("^(%s*)"))<curContainer.level then
+                    curContainer = curContainer.parent
+                    lineInd = lineInd-1
+                else
+                    curContainer.children:insert(AST.node("olist",{content},_,curContainer,{item=#curContainer.content},{level=#(line:match("^(%s*)"))}))
+                    curContainer = curContainer.childrent[#curContainer.children]
+                end
+            else
+                curContainer.children:insert(AST.node("olist",{content},_,curContainer,{item=#curContainer.content},{level=#(line:match("^(%s*)"))}))
+                curContainer = curContainer.children[#curContainer.children]
             end
         elseif isblank then --check terminator
             if #curParaLines>0 then
