@@ -170,8 +170,7 @@ function wrapPages(str)
     return pages
 end
 function printMD(str)
-    AST = md.parseMD(str)--parse md into the AST stuff, still missing bold stuff
-    
+    AST = md.parseMD(str)--parse md into the AST stuff, still missing further formatting
 end
 function parseMessage(message,from)
     message = textutils.unserialize(message)
