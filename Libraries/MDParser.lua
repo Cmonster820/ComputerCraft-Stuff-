@@ -123,6 +123,9 @@ function parseMD(documentStr)
     local lineInd = 1 --line index
     while lineInd<=#lines do
         local line = lines[lineInd]
+        if line:find("  ") then
+            line = line.."\n"
+        end
         local isblank = string.gsub(line, "%s", "") == "" --Identify if the current line is blank, used for parsing paragraphs
         if not line:find("^%s*>") then
             if curContainer.type == "bq" then
