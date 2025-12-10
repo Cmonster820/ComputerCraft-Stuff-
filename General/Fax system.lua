@@ -170,7 +170,17 @@ function wrapPages(str)
     return pages
 end
 function printMD(str)
-    AST = md.parseMD(str)--parse md into the AST stuff, still missing further formatting
+    local AST = md.parseMD(str)--parse md into the AST stuff, printer supports the md emphasis stuff aparently
+    if not p.newPage() then
+        print("Insufficient ink or paper")
+        repeat
+            os.sleep(1)
+        until p.newPage()
+    end
+    local base = os.date()
+    local count = 1
+    p.setPageTitle(base..count)
+    
 end
 function parseMessage(message,from)
     message = textutils.unserialize(message)
@@ -181,14 +191,13 @@ function parseMessage(message,from)
     if message.fileExtension~=".md" then
         local str = wrapParse(message.data)
         local pages = wrapPages(str)
-        local pcount = 1
-        for _,page in ipairs(pages) do
+        for count,page in ipairs(pages) do
             if not p.newPage() then
                 repeat
                     print("Insufficient paper or ink")
                 until p.newPage()
             end
-            p.setPageTitle(os.date().." "..pcount)
+            p.setPageTitle(os.date().." "..count)
             p.write(page)
         end
     else
