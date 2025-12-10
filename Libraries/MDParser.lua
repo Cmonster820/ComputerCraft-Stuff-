@@ -31,15 +31,18 @@ function parseMD(documentStr)
     while lineInd<=#lines do
         local line = lines[lineInd]
         local isblank = string.gsub(line, "%s", "") == "" --Identify if the current line is blank, used for parsing paragraphs
-        if line:find("^#") then -- if #'s are present then do heading stuff
+        if curContainer.type == "cb" then
+            if line:find("^%s*```") then
+                curContainer = curContainer.parent
+            else
+                curContainer.content:insert(line)
+            end
+        elseif line:find("^#") then -- if #'s are present then do heading stuff
             local level = line:match("^(#+) ") --creates a string of pound symbols that the # operator can be used on to get the level
             local content = line:match("^#+ (.*)$")--extracts content
             curContainer.children:insert(AST.node("header",{content},_,curContainer,{level=#level}))
         elseif line:find("^%s*[%-%*][%-%*][%-%*]%s*$") then --check for horizontal rules
-            if curContainer.type~="cb" then
-                curContainer.children:insert(AST.node("hrule",_,curContainer,{item=#curContainer.content},nil))
-            elseif curContainer.type=="cb" then
-                curContainer.content:insert(line)
+                curContainer.children:insert(AST.node("hrule",_,curContainer,{item=#curContainer.content}))
             end
         elseif line:find("^%s*[*-+]%s+") then --check for unordered lists
             local content = line:match("^%s*[*-+]%s+ (.*)$")--should extract content
@@ -102,7 +105,7 @@ function parseMD(documentStr)
                 curContainer.children:insert(AST.node("olist",{content},_,curContainer,{item=#curContainer.content},{level=#(line:match("^(%s*)"))}))
                 curContainer = curContainer.children[#curContainer.children]
             end
-        elseif string.find(line, "^%s*>") then --check blockquotes
+        elseif line:find("^%s*>") then --check blockquotes
             local content = line:match("^%s*> (.*$)")
             local level = #(line:match("^(%s*)"))
             if curContainer.type=="list" or curContainer.type=="olist" then
@@ -129,6 +132,15 @@ function parseMD(documentStr)
                 curContainer.children:insert(AST.node("bq",{content},_,curContainer,{item=#curContainer},{level=level}))
                 curContainer=curContainer.children[#curContainer.children]
             end
+        elseif line:find("^%s*```") then -- check for code blocks, no special formatting inside them
+            if curContainer.type~="cb" then
+                curContainer = curContainer.parent
+            elseif curContainer.type=="document" then
+                curContainer.children:insert(AST.node("cb",{},_,curContainer))
+                curContainer = curContainer.children[#curContainer.children]
+            else
+                curContainer.children:insert(AST.node("cb",{},_,curContainer,{item=#curContainer.content},{level=curContainer.level}))
+            end 
         end
         lineInd = lineInd+1
     end
