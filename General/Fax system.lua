@@ -169,21 +169,7 @@ function wrapPages(str)
     return pages
 end
 function printMD(str)
-    for i=1,#str do
-        if str[i]=="#" then
-            local poundcount = 1
-            local j=i
-            while str[j]=="#" do
-                j = j+1
-                poundcount = poundcount+1
-                if str[j+1]==" " then
-                    i=j+2
-                    break
-                end
-            end
-            
-        end
-    end
+    --I'm gonna parse it into html using a separate library and then print that out.
 end
 function parseMessage(message,from)
     message = textutils.unserialize(message)
