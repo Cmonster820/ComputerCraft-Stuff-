@@ -2,8 +2,8 @@
 --turns out to be simpler then I will remove them because of reasons
 --all regex is out of google ai because I'm not enough of a no-life to learn lua regex
 local AST = {}
-local function AST.node(type,content,children)
-    return { type = type, content = content, children = children or {} }
+local function AST.node(type,content,children,parent,...)
+    return { type = type, content = content, children = children or {},parent = parent or nil,{...} }
 end
 main = {}
 local function is_block_start(line) --this entire function is copy pasted from google ai because of the amount of RegEx
@@ -25,7 +25,7 @@ function parseMD(documentStr)
         lines:insert(line)--populate table
     end
     local document = AST.node("document") --create parentest node
-    local curContainer = document --Google ai is doing most of the heavy lifting but I'm pretty sure this is just the parent node being worked on so stuff like curContainer.children = node
+    local curContainer = document
     local lineInd = 1 --line index
     local curParaLines = {} -- buffer to hold paragraph lines, I'm not even sure what I repurposed it into
     while lineInd<=#lines do
@@ -34,29 +34,54 @@ function parseMD(documentStr)
         if line:find("^#") then -- if #'s are present then do heading stuff
             local level = line:match("^(#+) ") --creates a string of pound symbols that the # operator can be used on to get the level
             local content = line:match("^#+ (.*)$")--extracts content
-            curContainer.children:insert(AST.node("header",{content},{level=#level}))
-            lineInd = lineInd+1
+            curContainer.children:insert(AST.node("header",{content},_,curContainer,{level=#level}))
         elseif line:find("^%s*[%-%*][%-%*][%-%*]%s*$") then --check for horizontal rules
             if curContainer.type=="list" or curContainer.type=="Olist" or curContainer.type=="bq" then
-                curContainer.children:insert(AST.node("hrule",nil,nil))
+                curContainer.children:insert(AST.node("hrule",_,curContainer,{item=#curContainer.content},nil))
             elseif curContainer.type~="cb" then
                 curContainer.content:insert(line)
             else
                 if #curParaLines>0 then
                     curContainer = document
-                    curContainer.children:insert(AST.node("hrule",nil,nil))
+                    curContainer.children:insert(AST.node("hrule",_,_,curContainer))
                 end
             end
         elseif line:find("^%s*[*-+]%s+") then --check for unordered lists
             local content = line:match("^%s*[*-+]%s+ (.*)$")--should extract content
-            if curContainer == document then
-                curContainer.children:insert(AST.node("list",{content}))
+            if curContainer == "document" then
+                curContainer.children:insert(AST.node("list",{content},_,curContainer,{level=#(line:match("^(%s*)"))}))
                 curContainer = curContainer.children[#curContainer.children]
-            elseif curContainer == "list" then
-                curContainer.content:insert(content)
+            elseif curContainer.type == "list" then
+                if #(line:match("^(%s*)"))==curContainer.level then
+                    curContainer.content:insert(content)
+                elseif #(line:match("^(%s*)"))>curContainer.level then
+                    curContainer.children:insert(AST.node("list",{content},_,curContainer,{item=#curContainer.content},{level=#(line:match("^(%s*)"))})))
+                    curContainer = curContainer.children[#curContainer.children]
+                else
+                    curContainer = curContainer.parent
+                    lineInd = lineInd-1
+                end
             else
-                curContainer.children:insert(AST.node("list",{content},{item=#curContainer.content}))
+                curContainer.children:insert(AST.node("list",{content},_,curContainer,{item=#curContainer.content},{level = #(line:match("^(%s*)"))}))
                 curContainer = curContainer.children[#curContainer.children]
+            end
+        elseif line:find("^%s*%d+%.%s+") then --detect ordered lists
+            local content = line:match("^%s*%d+%.%s+ (.*$)")
+            if curContainer.type == "document" then
+                curContainer.children:insert(AST.node("olist",{content},_,curContainer,{level=#(line:match("^(%s*)"))}))
+                curContainer = curContainer.children[#curContainer.children]
+            elseif curContainer.type == "olist" then
+                if #(line:match("^(%s*)")) == curContainer.level then
+                    curContainer.content:insert(content)
+                    curContainer = curContainer.children[#curContainer.children]
+                elseif #(line:match("^(%s*)"))>curContainer.level then
+                    curContainer.children:insert(AST.node("olist",{content},_,curContainer,{item=#curContainer.content},{level=#(line:match("^(%s*)"))}))
+                    curContainer = curContainer.children[#curContainer.children]
+                else
+                    curContainer = curContainer.parent
+                    lineInd = lineInd-1
+                end
+            elseif curContainer then
             end
         elseif isblank then --check terminator
             if #curParaLines>0 then
@@ -64,5 +89,6 @@ function parseMD(documentStr)
             end
             --I'll finish this up last because paragraph stuff is the final case
         end
+        lineInd = lineInd+1
     end
 end
