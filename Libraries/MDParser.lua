@@ -36,15 +36,10 @@ function parseMD(documentStr)
             local content = line:match("^#+ (.*)$")--extracts content
             curContainer.children:insert(AST.node("header",{content},_,curContainer,{level=#level}))
         elseif line:find("^%s*[%-%*][%-%*][%-%*]%s*$") then --check for horizontal rules
-            if curContainer.type=="list" or curContainer.type=="Olist" or curContainer.type=="bq" then
+            if curContainer.type~="cb" then
                 curContainer.children:insert(AST.node("hrule",_,curContainer,{item=#curContainer.content},nil))
-            elseif curContainer.type~="cb" then
+            elseif curContainer.type=="cb" then
                 curContainer.content:insert(line)
-            else
-                if #curParaLines>0 then
-                    curContainer = document
-                    curContainer.children:insert(AST.node("hrule",_,_,curContainer))
-                end
             end
         elseif line:find("^%s*[*-+]%s+") then --check for unordered lists
             local content = line:match("^%s*[*-+]%s+ (.*)$")--should extract content
@@ -61,7 +56,7 @@ function parseMD(documentStr)
                     curContainer = curContainer.parent
                     lineInd = lineInd-1
                 end
-            elseif curContainer.type = "olist" then
+            elseif curContainer.type == "olist" then
                 if #(line:match("^(%s*)"))==curContainer.level then
                     curContainer = curContainer.parent
                     lineInd = lineInd-1
@@ -92,7 +87,7 @@ function parseMD(documentStr)
                     curContainer = curContainer.parent
                     lineInd = lineInd-1
                 end
-            elseif curContainer.type = "list" then
+            elseif curContainer.type == "list" then
                 if #(line:match("^(%s*)"))==curContainer.level then
                     curContainer = curContainer.parent
                     lineInd = lineInd-1
@@ -107,11 +102,33 @@ function parseMD(documentStr)
                 curContainer.children:insert(AST.node("olist",{content},_,curContainer,{item=#curContainer.content},{level=#(line:match("^(%s*)"))}))
                 curContainer = curContainer.children[#curContainer.children]
             end
-        elseif isblank then --check terminator
-            if #curParaLines>0 then
-                curContainer = document --leave the paragraph node
+        elseif string.find(line, "^%s*>") then --check blockquotes
+            local content = line:match("^%s*> (.*$)")
+            local level = #(line:match("^(%s*)"))
+            if curContainer.type=="list" or curContainer.type=="olist" then
+                if curContainer.level == level then
+                    curContainer.children:insert(AST.node("bq",{content},_,curContainer,{item = #curContainer.content},{level=level}))
+                    curContainer = curContainer.children[#curContainer.children]
+                else
+                    curContainer = curContainer.parent
+                    curContainer.children:insert(AST.node("bq",{content},_,curContainer,{item = #curContainer.content},{level=level}))
+                end
+            elseif curContainer.type=="document" then
+                curContainer.children:insert(AST.node("bq",{content},_,curContainer,{level=level}))
+            elseif curContainer.type =="bq" then
+                if curContainer.level==level then
+                    curContainer.content:insert(content)
+                elseif curContainer.level<level then
+                    curContainer.children:insert(AST.node("bq",{content},_,curContainer,{item=#curContainer.content},{level=level}))
+                    curContainer = curContainer.children[#curContainer.children]
+                else
+                    curContainer = curContainer.parent
+                    lineInd = lineInd-1
+                end
+            elseif curContainer.type =="paragraph" then
+                curContainer.children:insert(AST.node("bq",{content},_,curContainer,{item=#curContainer},{level=level}))
+                curContainer=curContainer.children[#curContainer.children]
             end
-            --I'll finish this up last because paragraph stuff is the final case
         end
         lineInd = lineInd+1
     end
