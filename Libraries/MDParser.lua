@@ -6,19 +6,6 @@ local function AST.node(type,content,children,parent,...)
     return { type = type, content = content, children = children or {},parent = parent or nil,{...} }
 end
 main = {}
-local function is_block_start(line) --this entire function is copy pasted from google ai because of the amount of RegEx
-    -- Check for Headers
-    if string.find(line, "^#") then return true end
-    -- Check for Horizontal Rules (--- or ***)
-    if string.find(line, "^%s*[%-%*][%-%*][%-%*]%s*$") then return true end
-    -- Check for List items
-    if string.find(line, "^%s*[*-+]%s+") then return true end
-    -- Check for Blockquotes
-    if string.find(line, "^%s*>") then return true end
-    -- Check for Code Fences
-    if string.find(line, "^%s*```") then return true end
-    return false
-end
 function parseMD(documentStr)
     local lines = {} --table containing each line
     for line in string.gmatch(documentStr .. "\n", "(.-)\n") do
@@ -141,6 +128,14 @@ function parseMD(documentStr)
             else
                 curContainer.children:insert(AST.node("cb",{},_,curContainer,{item=#curContainer.content},{level=curContainer.level}))
             end 
+        elseif isblank then
+            curContainer = curContainer.parent
+        else
+            if curContainer.type~="paragraph" then
+                curContainer.children:insert(AST.node("paragraph",{line},_,curContainer))
+            else
+                curContainer.content:insert(line)
+            end
         end
         lineInd = lineInd+1
     end
