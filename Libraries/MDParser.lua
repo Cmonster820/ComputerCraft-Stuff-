@@ -128,9 +128,9 @@ function parseMD(documentStr)
             else
                 curContainer.children:insert(AST.node("cb",{},_,curContainer,{item=#curContainer.content},{level=curContainer.level}))
             end 
-        elseif isblank then
-            curContainer = curContainer.parent
-        else
+        elseif isblank then --split blocks
+            curContainer = document
+        else --paragraph processing
             if curContainer.type~="paragraph" then
                 curContainer.children:insert(AST.node("paragraph",{line},_,curContainer))
             else
