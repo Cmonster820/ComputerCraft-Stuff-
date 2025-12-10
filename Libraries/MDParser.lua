@@ -252,3 +252,5 @@ function parseMD(documentStr)
         lineInd = lineInd+1
     end
 end
+main.parseMD = parseMD
+return main
