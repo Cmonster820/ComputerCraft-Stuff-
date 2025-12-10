@@ -130,12 +130,13 @@ function main()
         goto reconf2
     end
 end
-function wrapParse(str)
+function wrapParse(str,wid)
+    wid = wid or w
     local lines = {}
     for line in str:gmatch("([^\n]*)\n?") do
         local curline = ""
         for word in line:gmatch("(%S+)") do
-            if #curline+#word+(#curline>0 and 1 or 0)>w then
+            if #curline+#word+(#curline>0 and 1 or 0)>wid then
                 lines:insert(curline)
             else
                 if #curline==0 then
@@ -148,7 +149,8 @@ function wrapParse(str)
     end
     return lines:concat("\n")
 end
-function wrapPages(str)
+function wrapPages(str,hi)
+    hi = hi or h
     local _,numnewlines = string.gsub(str,"\n")
     local numlines = numnewlines+1
     local curStr = ""
@@ -156,12 +158,12 @@ function wrapPages(str)
     local pages = {}
     for line in str:gmatch("([^\n]*)\n?") do
         count = count+1
-        if count>h then
+        if count>hi then
             pages:insert(curStr)
             curStr=""
-            count = 1
+            count = 2
         end
-        if #curStr==0 then
+        if #curStr==4 then
             curStr = line
         else
             curStr = curStr.."\n"..line
@@ -174,12 +176,11 @@ function printMD(str)
     if not p.newPage() then
         print("Insufficient ink or paper")
         repeat
-            os.sleep(1)
+            os.sleep(2)
         until p.newPage()
     end
-    local base = os.date()
+    local base = os.date().."\n"
     local count = 1
-    p.setPageTitle(base..count)
     
 end
 function parseMessage(message,from)
