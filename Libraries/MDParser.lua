@@ -251,6 +251,7 @@ function parseMD(documentStr)
         end
         lineInd = lineInd+1
     end
+    return document
 end
 main.parseMD = parseMD
 return main

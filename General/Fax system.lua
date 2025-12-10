@@ -1,5 +1,6 @@
 p = peripheral.find("printer")
 m = peripheral.find("modem")
+md = require("MDparse")
 name = "end1"
 rednet.host("FAX",name)
 rednet.host("FAXint",name)
@@ -169,7 +170,7 @@ function wrapPages(str)
     return pages
 end
 function printMD(str)
-    --I'm gonna parse it into a better representation using a separate library and then print that out.
+    AST =
 end
 function parseMessage(message,from)
     message = textutils.unserialize(message)
