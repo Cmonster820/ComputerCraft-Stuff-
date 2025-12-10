@@ -169,7 +169,7 @@ function wrapPages(str)
     return pages
 end
 function printMD(str)
-    --I'm gonna parse it into html using a separate library and then print that out.
+    --I'm gonna parse it into a better representation using a separate library and then print that out.
 end
 function parseMessage(message,from)
     message = textutils.unserialize(message)
