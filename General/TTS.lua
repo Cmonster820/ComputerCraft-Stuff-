@@ -12,17 +12,19 @@ local packet = {
 --Connect to websocket and send message
 function sendWsMessage(content, ctype)
     local ws = assert(http.websocket(--[[add in the websocket later]],{message = "Connecting, ID: "..ID}), "Websocket unavailable") --ensure websocket is there
-    local message,bin = ws.receive()
+    --[[local message,bin = ws.receive()
     assert(bin == false, "Binary response received, not supported")
-    assert(message == "Accepted", "Connection declined by server")
+    assert(message == "Accepted", "Connection declined by server")]]
     print("Sending packet")
     packet.content = content
     packet.ctype = ctype
-    ws.send(textutils.serialize(packet))
+    ws.send(textutils.serializeJSON(packet))
     print("Done")
     print("Awaiting response")
-    local message, bin = ws.receive()
-    assert(bin == false, "Binary responses are not supported")
+    local message, bin
+    repeat
+        message,bin= ws.receive()
+    until bin==true
     local file = io.open("data/audio.dfpwm","w+")
     file:write(message)
     file:close()

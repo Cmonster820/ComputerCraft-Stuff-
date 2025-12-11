@@ -3,6 +3,7 @@
 #and converting it to dfpwm, before sending it back to the computer on the minecraft server
 #Google cloud TTS API
 import asyncio
+import json
 import websockets
 from google.cloud import texttospeech
 import ffmpeg
@@ -25,20 +26,26 @@ async def synthesize_message(text):
         out.write(response.audio_content)
     print(f"Audio written to: C:/CCTTS/{text}.mp3")
     #differs from google ai here because it didn't have conversion to dfpwm in the same file
-    return response
+    return "C:/CCTTS/"+text+".mp3"
 #voice choice decoder goes here, not implemented yet
-async def convertMP3DfPWM(audioMP3,filename):
-    try:
-        (
-            ffmpeg
-            .input(audioMP3)
-            .output(filename)
-        )
+async def convertMP3DfPWM(audioMP3path,filename):
+    ffmpeg.input(audioMP3path).output(filename,ac=1,acodec='dfpwm',ar='48k').run()
+    print(f"Audio conversion complete, output written to:\n {filename}")
+    with open(filename,"rb") as in:
+        DfPWM = in.read()
+    return DfPWM
 async def websocket_listener():
     uri = ""#haven't set this up yet
     async with websockets.connect(uri) as websocket:
         print("Waiting for message...")
         async for message in websocket:
-            print(f"Received message: {message}")
-            audioMP3 = await synthesize_message(message)
-            audioDfPWM = await convertMP3DfPWM(audioMP3,"C:/CCTTS/"+message+".dfpwm")
+            if isinstance(message, str):
+                jmess = json.loads(message,object_hook=lambda d: SimpleNamespace(**d))
+                content = jmess.content
+                ctype = jmess.ctype
+                print(f"Received message: {content}")
+                audioMP3path = await synthesize_message(content)
+                audioDfPWM = await convertMP3DfPWM(audioMP3path,"C:/CCTTS/"+content+".dfpwm")
+                websocket.send(audioDfPWM)
+            elif isinstance(message,bytes):
+                pass
