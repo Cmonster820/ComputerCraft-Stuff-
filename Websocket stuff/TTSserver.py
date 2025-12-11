@@ -32,8 +32,8 @@ async def synthesize_message(text):
 async def convertMP3DfPWM(audioMP3path,filename):
     ffmpeg.input(audioMP3path).output(filename,ac=1,acodec='dfpwm',ar='48k').run()
     print(f"Audio conversion complete, output written to:\n {filename}")
-    with open(filename,"rb") as in:
-        DfPWM = in.read()
+    with open(filename,"rb") as infile:
+        DfPWM = infile.read()
     return DfPWM
 #handle websocket
 async def websocket_handler(websocket):
