@@ -7,6 +7,7 @@ import json
 import websockets
 from google.cloud import texttospeech
 import ffmpeg
+from websockets.asyncio.server import serve
 async def synthesize_message(text):
     client = texttospeech.TextToSpeechClient()
     sythIn = texttospeech.SynthesisInput(text = text)
@@ -34,18 +35,26 @@ async def convertMP3DfPWM(audioMP3path,filename):
     with open(filename,"rb") as in:
         DfPWM = in.read()
     return DfPWM
-async def websocket_listener():
-    uri = ""#haven't set this up yet
-    async with websockets.connect(uri) as websocket:
-        print("Waiting for message...")
-        async for message in websocket:
-            if isinstance(message, str):
-                jmess = json.loads(message,object_hook=lambda d: SimpleNamespace(**d))
-                content = jmess.content
-                ctype = jmess.ctype
-                print(f"Received message: {content}")
-                audioMP3path = await synthesize_message(content)
-                audioDfPWM = await convertMP3DfPWM(audioMP3path,"C:/CCTTS/"+content+".dfpwm")
-                websocket.send(audioDfPWM)
-            elif isinstance(message,bytes):
-                pass
+#handle websocket
+async def websocket_handler(websocket):
+    print("Waiting for message...")
+    async for message in websocket:
+        if isinstance(message, str):
+            jmess = json.loads(message,object_hook=lambda d: SimpleNamespace(**d))
+            content = jmess.content
+            ctype = jmess.ctype
+            print(f"Received message: {content}")
+            audioMP3path = await synthesize_message(content)
+            audioDfPWM = await convertMP3DfPWM(audioMP3path,"C:/CCTTS/"+content+".dfpwm")
+            websocket.send(audioDfPWM)
+        elif isinstance(message,bytes):
+            pass
+#websocket server:
+async def main():
+    async with serve(handler, "0.0.0.0", 8765) as server:
+        await server.wait_closed()
+if __name__ == "__main__":
+    try:
+        asyncio.run(main())
+    except KeyboardInterrupt:
+        print("Server terminated by user.")
