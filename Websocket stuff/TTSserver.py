@@ -50,7 +50,7 @@ async def websocket_handler(websocket):
             pass
 #websocket server:
 async def main():
-    async with serve(handler, "0.0.0.0", 8765) as server:
+    async with serve(websocket_handler, "0.0.0.0", 8765) as server:
         await server.wait_closed()
 if __name__ == "__main__":
     try:
