@@ -37,7 +37,6 @@ async def convertMP3DfPWM(audioMP3path,filename):
     return DfPWM
 #handle websocket
 async def websocket_handler(websocket):
-    print("Waiting for message...")
     async for message in websocket:
         if isinstance(message, str):
             jmess = json.loads(message,object_hook=lambda d: SimpleNamespace(**d))
