@@ -26,6 +26,10 @@ function sendWsMessage(message)
     packet.ctype = ctype
     ws.send(textutils.serialize(packet))
     print("Done")
+    print("Awaiting response")
+    local message, bin = ws.receive()
+    assert(bin == false, "Binary responses are not supported")
+    
 end
 for chunk in io.lines("data/audio.dfpwm",16*1024) do
     local buffer = decoder(chunk)
