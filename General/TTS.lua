@@ -11,7 +11,7 @@ local packet = {
 }
 --Connect to websocket and send message
 function sendWsMessage(content, ctype)
-    local ws = assert(http.websocket(--[[add in the websocket later]],{message = "Connecting, ID: "..ID}), "Websocket unavailable") --ensure websocket is there
+    local ws = assert(http.websocket(--[[add in the websocket later]],--[[{message = "Connecting, ID: "..ID}]]), "Websocket unavailable") --ensure websocket is there
     --[[local message,bin = ws.receive()
     assert(bin == false, "Binary response received, not supported")
     assert(message == "Accepted", "Connection declined by server")]]
