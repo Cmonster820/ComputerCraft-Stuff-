@@ -4,19 +4,13 @@ local dfpwm = require("cc.audio.dfpwm")
 local speaker = peripheral.find("speaker")
 local decoder = dfpwm.make_decoder()
 local ID = rednet.getIdentifier()
---obtain message
-print("What would you like to say?")
-local content = read()
-print("How would you like it said? (number, 0 for default)")
 local ctype = tonumber(read())
 local packet = {
     content = "",
     ctype = 0
 }
---types will be added later
-
 --Connect to websocket and send message
-function sendWsMessage(message)
+function sendWsMessage(content, ctype)
     local ws = assert(http.websocket(--[[add in the websocket later]],{message = "Connecting, ID: "..ID}), "Websocket unavailable") --ensure websocket is there
     local message,bin = ws.receive()
     assert(bin == false, "Binary response received, not supported")
@@ -29,11 +23,28 @@ function sendWsMessage(message)
     print("Awaiting response")
     local message, bin = ws.receive()
     assert(bin == false, "Binary responses are not supported")
-    
+    local file = io.open("data/audio.dfpwm","w+")
+    file:write(message)
+    file:close()
+    packet.content = ""
+    packet.ctype = 0
+    ws.close()
 end
-for chunk in io.lines("data/audio.dfpwm",16*1024) do
-    local buffer = decoder(chunk)
-    while not speaker.playAudio(buffer) do
-        os.pullEvent("speaker_audio_empty")
+function playFile()
+    for chunk in io.lines("data/audio.dfpwm",16*1024) do
+        local buffer = decoder(chunk)
+        while not speaker.playAudio(buffer) do
+            os.pullEvent("speaker_audio_empty")
+        end
     end
 end
+--obtain message
+::newthing::
+print("What would you like to say?")
+local content = read()
+print("How would you like it said? (number, 0 for default)")
+--types will be added later
+local ctype = read()
+sendWsMessage(content,ctype)
+playFile()
+goto newthing
