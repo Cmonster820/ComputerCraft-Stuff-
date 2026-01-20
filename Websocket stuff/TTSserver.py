@@ -52,7 +52,7 @@ async def websocket_handler(websocket):
 async def main():
     async with serve(websocket_handler, "0.0.0.0", 8765) as server:
         await server.wait_closed()
-if __name__ == "__main__":
+if __name__ == "TTSserver":
     try:
         asyncio.run(main())
     except KeyboardInterrupt:
