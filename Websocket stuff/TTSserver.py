@@ -10,7 +10,7 @@ import ffmpeg
 from websockets.asyncio.server import serve
 async def synthesize_message(text):
     client = texttospeech.TextToSpeechClient()
-    sythIn = texttospeech.SynthesisInput(text = text)
+    synthIn = texttospeech.SynthesisInput(text = text)
     #the following 3 blocks are copypasted from google ai (like the rest of this program because I haven't used Python for a real project yet)
     voice = texttospeech.VoiceSelectionParams(
         language_code="en-US", 
@@ -21,7 +21,7 @@ async def synthesize_message(text):
     )
     #synth response
     response = client.synthesize_speech(
-        input=synthesis_input, voice=voice, audio_config=audio_config
+        input=synthIn, voice=voice, audio_config=audio_config
     )
     with open("C:/CCTTS/"+text+".mp3","wb") as out:
         out.write(response.audio_content)
