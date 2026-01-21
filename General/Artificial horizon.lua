@@ -1,2 +1,3 @@
 --Objective: make an artificial horizon display thingy like that one screen in carrier command 2
 --oh god quaternions
+--how the hell am I gonna do this
