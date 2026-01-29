@@ -6,6 +6,7 @@
 --SET UP AZIMUTH WITH 8:1 RATIO
 --^^^^^ might already be that way
 math = require("math")
+local sin(), cos(), tan(), asin(), acos(), atan(), rad(), abs(), sqrt(), deg() = math.sin(), math.cos(), math.tan(), math.asin(), math.acos(), math.atan(), math.rad(), math.abs(), math.sqrt(), math.deg()
 function round(n)
     if math.ceil(n)-n>math.abs(math.floor(n)) then
         return math.floor(n)
@@ -86,30 +87,30 @@ print("Trajectory projected to 2 dimensions")
 theta = 0
 gravity = -1 --(I think this is blocks/tick/tick idk)
 --calulate maximum height using air resistanceless math
-maxheight = ((v*math.sin(1/2*math.asin((dist*20*gravity)/(v^2))))^2)/(2*20*gravity)
+maxheight = ((v*sin(1/2*asin((dist*20*gravity)/(v^2))))^2)/(2*20*gravity)
 Cd = 0.99 --velocity remaining after each tick (%)
 oldendx = 0
 oldendy = 0
 endx = 0
 endy = 0
-for thetas=0,math.rad(90),math.rad(0.125) do
-    local startx = math.cos(thetas)*length
-    local starty = math.sin(thetas)*length
+for thetas=0,rad(90),rad(0.125) do
+    local startx = cos(thetas)*length
+    local starty = sin(thetas)*length
     local projx = startx
     local projy = starty
     local projv = v
     local prevthetas = thetas-0.125
     local projang = thetas
     while true do
-        local projvx = projv*math.cos(projang)
-        local projvy = projv*math.sin(projang)
+        local projvx = projv*cos(projang)
+        local projvy = projv*sin(projang)
         projx = projx + projvx
         projy = projy + projvy
         projvy = projvy+gravity
-        projvx = projvx*(Cd*math.abs(math.cos(projang)))
-        projvy = projvy*(Cd*math.abs(math.sin(projang)))
-        projv = math.sqrt(projvy^2+projvx^2)
-        projang = math.atan(projvy/projvx)
+        projvx = projvx*(Cd*abs(cos(projang)))
+        projvy = projvy*(Cd*abs(sin(projang)))
+        projv = sqrt(projvy^2+projvx^2)
+        projang = atan(projvy/projvx)
         print("vx: "..projvx.."\nvy: "..projvy.."\nx: "..projx.."\ny: "..projy.."\nv: "..projv.."\n\u{03b8}p: "..projang.."\n\u{03b8}: "..thetas.."\n")
         if projx>=dist then
             endx=projx
@@ -152,18 +153,18 @@ end
 print("Calculating \u{03d6}")
 phi = 0
 if tvx>0 then
-    phi = math.atan(tvz/tvx)
+    phi = atan(tvz/tvx)
 else
-    phi = math.atan(tvz/tvx)+math.rad(180)
+    phi = atan(tvz/tvx)+rad(180)
 end
 if phi<0 then
-    phi = phi+math.rad(360)
+    phi = phi+rad(360)
 end
-print("\u{03d6} = "..math.deg(phi))
-print("Firing solution (\u{03d6},\u{03b8}): ("..math.deg(phi)..","..math.deg(theta)..")")
+print("\u{03d6} = "..deg(phi))
+print("Firing solution (\u{03d6},\u{03b8}): ("..(phi)..","..(theta)..")")
 print("Aiming.")
-azimuth.rotate(math.floor(8*math.deg(phi)),2)
-elevation.rotate(math.floor(8*math.deg(theta)),2)
+azimuth.rotate(math.floor(8*deg(phi)),2)
+elevation.rotate(math.floor(8*deg(theta)),2)
 while azimuth.isRunning() and elevation.isRunning() do
     os.sleep(0.1)
 end
