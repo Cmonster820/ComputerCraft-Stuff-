@@ -151,7 +151,7 @@ for thetas=0,rad(90),rad(0.125) do
     oldendx = endx
 end
 print("Calculating \u{03d6}")
-phi = 0
+local phi = 0
 if tvx>0 then
     phi = atan(tvz/tvx)
 else
@@ -161,12 +161,12 @@ if phi<0 then
     phi = phi+rad(360)
 end
 print("\u{03d6} = "..deg(phi))
-print("Firing solution (\u{03d6},\u{03b8}): ("..(phi)..","..(theta)..")")
+print("Firing solution (\u{03d6},\u{03b8}): ("..deg(phi)..","..deg(theta)..")")
 print("Aiming.")
 azimuth.rotate(math.floor(8*deg(phi)),2)
 elevation.rotate(math.floor(8*deg(theta)),2)
 while azimuth.isRunning() and elevation.isRunning() do
-    os.sleep(0.1)
+    os.sleep(0)
 end
 print("Aiming Complete, firing")
 redstone.setOutput("top",true)
