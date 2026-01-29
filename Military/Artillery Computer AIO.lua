@@ -8,10 +8,10 @@
 math = require("math")
 local sin(), cos(), tan(), asin(), acos(), atan(), rad(), abs(), sqrt(), deg(), floor(), ceil() = math.sin(), math.cos(), math.tan(), math.asin(), math.acos(), math.atan(), math.rad(), math.abs(), math.sqrt(), math.deg(), math.floor(), math.ceil()
 local function round(n)
-    if math.ceil(n)-n>math.abs(math.floor(n)) then
-        return math.floor(n)
+    if ceil(n)-n>abs(floor(n)) then
+        return floor(n)
     end
-    return math.ceil(n)
+    return ceil(n)
 end
 print("Scanning for data file")
 if fs.exists("/data/artillery.txt") then
