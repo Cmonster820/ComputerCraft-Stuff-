@@ -9,7 +9,7 @@ local sin(),cos(),tan(),asin(),acos(),atan(),rad(),deg(), atan2() = math.sin(), 
 -- ^ lua is faster with locals than globals, even though math is a local here this skips the step of searching the math table, which also slows it down
 while true do --this seems cursed but here it's fine
     --get quat (I don't have the documentation for the api I'm using here but I'll change this later)
-    -- form: qw, qx, qy, qz, extract the parts to just wxyz
+    --form: qw, qx, qy, qz, extract the parts to just wxyz
     local heading = atan2(2*(y*z+w*x),(w^2)-(x^2)-(y^2)+(z^2))
     local attitude = asin(-2*(x*z-w*y))
     local bank = atan2(2*(x*y+w*z),(w^2)+(x^2)-(y^2)-(z^2))
