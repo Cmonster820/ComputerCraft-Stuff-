@@ -126,6 +126,8 @@ for thetas=0,math.rad(90),math.rad(0.125) do
             endx=projx
             break
         end
+        os.queueEvent("yield") --yield to prevent error
+        os.pullEvent("yield") --resume immediately
     end
     if (endx==dist and endy == tvy) then
         theta = thetas
