@@ -7,7 +7,7 @@
 --^^^^^ might already be that way
 math = require("math")
 local sin(), cos(), tan(), asin(), acos(), atan(), rad(), abs(), sqrt(), deg() = math.sin(), math.cos(), math.tan(), math.asin(), math.acos(), math.atan(), math.rad(), math.abs(), math.sqrt(), math.deg()
-function round(n)
+local function round(n)
     if math.ceil(n)-n>math.abs(math.floor(n)) then
         return math.floor(n)
     end
@@ -48,12 +48,12 @@ elseif answer ~="Y" then
     goto recorrect
 end
 print("What is the length of the cannon's barrel?")
-length = tonumber(read())
-v = 0
+local length = tonumber(read())
+local v = 0
 print("How many brass cartridge thingies are in use?")
-v=tonumber(read())*120+v
+local v=tonumber(read())*120+v
 print("How many powder things are in use")
-v=tonumber(read())*40+v
+local v=tonumber(read())*40+v
 print("Understood. Writing data to file.")
 datafile = io.open("/data/artillery.txt","w")
 datafile:write(x.."\n")
@@ -62,37 +62,37 @@ datafile:write(z.."\n")
 datafile:write(length.."\n")
 datafile:write((v/20).."\n")
 datafile:close()
-v = v/20
+local v = v/20
 print("Datafile generated and data stored")
 ::datadone::
-azimuth = peripheral.wrap("Create_SequencedGearshift_1")
-elevation = peripheral.wrap("Create_SequencedGearshift_0")
+local azimuth = peripheral.wrap("Create_SequencedGearshift_1")
+local elevation = peripheral.wrap("Create_SequencedGearshift_0")
 print("System ready")
 ::systemready::
 print("Please input the co-ordinates of the target")
 print("X")
-tx = tonumber(read())
+local tx = tonumber(read())
 print("Y")
-ty = tonumber(read())
+local ty = tonumber(read())
 print("Z")
-tz = tonumber(read())
-tvx = tx-x
-tvy = ty-y
-tvz = tz-z
+local tz = tonumber(read())
+local tvx = tx-x
+local tvy = ty-y
+local tvz = tz-z
 print("Vector from cannon elevation actuation point to target: \u{27E8}"..tvx..","..tvy..","..tvz.."\u{27E9}")
 print("Beginning simulation")
-dist = math.ceil(math.sqrt(tvx^2+tvz^2))
+local dist = math.ceil(math.sqrt(tvx^2+tvz^2))
 print("Distance: "..dist.." blocks, rounded to nearest integer")
 print("Trajectory projected to 2 dimensions")
-theta = 0
-gravity = -1 --(I think this is blocks/tick/tick idk)
+local theta = 0
+local gravity = -1 --(I think this is blocks/tick/tick idk)
 --calulate maximum height using air resistanceless math
-maxheight = ((v*sin(1/2*asin((dist*20*gravity)/(v^2))))^2)/(2*20*gravity)
-Cd = 0.99 --velocity remaining after each tick (%)
-oldendx = 0
-oldendy = 0
-endx = 0
-endy = 0
+local maxheight = ((v*sin(1/2*asin((dist*20*gravity)/(v^2))))^2)/(2*20*gravity)
+local Cd = 0.99 --velocity remaining after each tick (%)
+local oldendx = 0
+local oldendy = 0
+local endx = 0
+local endy = 0
 for thetas=0,rad(90),rad(0.125) do
     local startx = cos(thetas)*length
     local starty = sin(thetas)*length
