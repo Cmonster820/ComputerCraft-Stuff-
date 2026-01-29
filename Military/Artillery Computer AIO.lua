@@ -3,8 +3,6 @@
 --CONNECT FIRING TO TOP
 --ENSURE THAT POSITIVE AZIMUTH IS COUNTERCLOCKWISE AND THAT POSITIVE ELEVATION IS UP
 --this assumes you have an autoloader that resets the angle after each shot and that it takes 5 seconds to go
---SET UP AZIMUTH WITH 8:1 RATIO
---^^^^^ might already be that way
 math = require("math")
 local sin(), cos(), tan(), asin(), acos(), atan(), rad(), abs(), sqrt(), deg(), floor(), ceil() = math.sin(), math.cos(), math.tan(), math.asin(), math.acos(), math.atan(), math.rad(), math.abs(), math.sqrt(), math.deg(), math.floor(), math.ceil()
 local function round(n)
