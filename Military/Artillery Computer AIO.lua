@@ -6,7 +6,7 @@
 --SET UP AZIMUTH WITH 8:1 RATIO
 --^^^^^ might already be that way
 math = require("math")
-local sin(), cos(), tan(), asin(), acos(), atan(), rad(), abs(), sqrt(), deg() = math.sin(), math.cos(), math.tan(), math.asin(), math.acos(), math.atan(), math.rad(), math.abs(), math.sqrt(), math.deg()
+local sin(), cos(), tan(), asin(), acos(), atan(), rad(), abs(), sqrt(), deg(), floor(), ceil() = math.sin(), math.cos(), math.tan(), math.asin(), math.acos(), math.atan(), math.rad(), math.abs(), math.sqrt(), math.deg(), math.floor(), math.ceil()
 local function round(n)
     if math.ceil(n)-n>math.abs(math.floor(n)) then
         return math.floor(n)
