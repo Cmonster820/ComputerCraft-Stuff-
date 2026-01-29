@@ -132,18 +132,18 @@ for thetas=0,rad(90),rad(0.125) do
     end
     if (endx==dist and endy == tvy) then
         theta = thetas
-        print("Firing solution found for \u{03b8} = "..math.deg(theta))
+        print("Firing solution found for \u{03b8} = "..deg(theta))
         break
     end
     if (oldendx<dist and dist<endx) then
         if (dist-oldendx<dist-endx and tvy-oldendy<tvy-endy) then
             theta = prevthetas
-            print("Firing solution found for \u{03b8} = "..math.deg(theta).."\nWARNING: Firing solution not exact")
+            print("Firing solution found for \u{03b8} = "..deg(theta).."\nWARNING: Firing solution not exact")
             break
         end
         if (dist-oldendx>dist-endx and tvy-oldendy>tvy-endy) then
             theta = thetas
-            print("Firing solution found for \u{03b8} = "..math.deg(theta).."\nWARNING: Firing solution not exact")
+            print("Firing solution found for \u{03b8} = "..deg(theta).."\nWARNING: Firing solution not exact")
             break
         end
     end
