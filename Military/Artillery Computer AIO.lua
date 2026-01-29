@@ -163,8 +163,8 @@ end
 print("\u{03d6} = "..deg(phi))
 print("Firing solution (\u{03d6},\u{03b8}): ("..deg(phi)..","..deg(theta)..")")
 print("Aiming.")
-azimuth.rotate(math.floor(8*deg(phi)),2)
-elevation.rotate(math.floor(8*deg(theta)),2)
+azimuth.rotate(floor(8*deg(phi)),2)
+elevation.rotate(floor(8*deg(theta)),2)
 while azimuth.isRunning() and elevation.isRunning() do
     os.sleep(0)
 end
