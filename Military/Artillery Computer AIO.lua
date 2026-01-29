@@ -81,7 +81,7 @@ local tvy = ty-y
 local tvz = tz-z
 print("Vector from cannon elevation actuation point to target: \u{27E8}"..tvx..","..tvy..","..tvz.."\u{27E9}")
 print("Beginning simulation")
-local dist = math.ceil(math.sqrt(tvx^2+tvz^2))
+local dist = round(sqrt(tvx^2+tvz^2))
 print("Distance: "..dist.." blocks, rounded to nearest integer")
 print("Trajectory projected to 2 dimensions")
 local theta = 0
