@@ -4,7 +4,7 @@
 --ENSURE THAT POSITIVE AZIMUTH IS COUNTERCLOCKWISE AND THAT POSITIVE ELEVATION IS UP
 --this assumes you have an autoloader that resets the angle after each shot and that it takes 5 seconds to go
 math = require("math")
-local sin(), cos(), tan(), asin(), acos(), atan(), rad(), abs(), sqrt(), deg(), floor(), ceil() = math.sin(), math.cos(), math.tan(), math.asin(), math.acos(), math.atan(), math.rad(), math.abs(), math.sqrt(), math.deg(), math.floor(), math.ceil()
+local sin(), cos(), tan(), asin(), acos(), atan(), rad(), abs(), sqrt(), deg(), floor(), ceil(), atan2() = math.sin(), math.cos(), math.tan(), math.asin(), math.acos(), math.atan(), math.rad(), math.abs(), math.sqrt(), math.deg(), math.floor(), math.ceil(), math.atan2()
 local function round(n)
     if ceil(n)-n>abs(floor(n)) then
         return floor(n)
@@ -150,14 +150,7 @@ for thetas=0,rad(45),rad(0.125) do
 end
 print("Calculating \u{03d6}")
 local phi = 0
-if tvx>0 then
-    phi = atan(tvz/tvx)
-else
-    phi = atan(tvz/tvx)+rad(180)
-end
-if phi<0 then
-    phi = phi+rad(360)
-end
+phi = atan2(tvx,tvz)
 print("\u{03d6} = "..deg(phi))
 print("Firing solution (\u{03d6},\u{03b8}): ("..deg(phi)..","..deg(theta)..")")
 print("Aiming.")
