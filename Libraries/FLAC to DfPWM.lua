@@ -9,3 +9,4 @@ end
 local function main.convertFile(pathIn, pathOut)
 
 end
+return main
