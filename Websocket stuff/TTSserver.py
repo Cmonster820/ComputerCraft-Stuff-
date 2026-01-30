@@ -2,6 +2,7 @@
 #it receives the websocket message, parses it, and then sends it to a tts website, downloading the audio
 #and converting it to dfpwm, before sending it back to the computer on the minecraft server
 #Google cloud TTS API
+#NOTE I CHANGED THE FILE FROM MP3 TO FLAC, BUT DIDN'T CHANGE VARIABLE NAMES
 import asyncio
 import json
 import websockets
@@ -17,17 +18,17 @@ async def synthesize_message(text):
         ssml_gender=texttospeech.SsmlVoiceGender.NEUTRAL
     )
     audio_config = texttospeech.AudioConfig(
-        audio_encoding=texttospeech.AudioEncoding.MP3
+        audio_encoding=texttospeech.AudioEncoding.FLAC
     )
     #synth response
     response = client.synthesize_speech(
         input=synthIn, voice=voice, audio_config=audio_config
     )
-    with open("C:/CCTTS/"+text+".mp3","wb") as out:
+    with open("C:/CCTTS/"+text+".flac","wb") as out:
         out.write(response.audio_content)
-    print(f"Audio written to: C:/CCTTS/{text}.mp3")
+    print(f"Audio written to: C:/CCTTS/{text}.flac")
     #differs from google ai here because it didn't have conversion to dfpwm in the same file
-    return "C:/CCTTS/"+text+".mp3"
+    return "C:/CCTTS/"+text+".flac"
 #voice choice decoder goes here, not implemented yet
 async def convertMP3DfPWM(audioMP3path,filename):
     ffmpeg.input(audioMP3path).output(filename,ac=1,acodec='dfpwm',ar='48k').run()
