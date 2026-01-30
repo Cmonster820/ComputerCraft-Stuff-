@@ -5,7 +5,7 @@ local AST = {}
 local function AST.node(type,content,children,parent,...)
     return { type = type, content = content, children = children or {},parent = parent or nil,{...} }
 end
-main = {}
+local main = {}
 local function processbq(container)
     local lineInd = 1
     local isblank = string.gsub(line,"%s","")==""
@@ -256,5 +256,5 @@ function parseMD(documentStr)
     end
     return document
 end
-main.parseMD = parseMD
+main.parseMD() = parseMD()
 return main
