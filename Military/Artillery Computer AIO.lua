@@ -108,7 +108,7 @@ for thetas=0,rad(45),rad(0.125) do
         projvx = projvx*(Cd*abs(cos(projang)))
         projvy = projvy*(Cd*abs(sin(projang)))
         projv = sqrt(projvy^2+projvx^2)
-        projang = atan(projvy/projvx)
+        projang = atan2(projvx,projvy)
         print("vx: "..projvx.."\nvy: "..projvy.."\nx: "..projx.."\ny: "..projy.."\nv: "..projv.."\n\u{03b8}p: "..projang.."\n\u{03b8}: "..thetas.."\n")
         if projx>=dist then
             endx=projx
