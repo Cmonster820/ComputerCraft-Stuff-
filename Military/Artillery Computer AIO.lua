@@ -3,7 +3,7 @@
 --CONNECT FIRING TO TOP
 --ENSURE THAT POSITIVE AZIMUTH IS COUNTERCLOCKWISE AND THAT POSITIVE ELEVATION IS UP
 --this assumes you have an autoloader that resets the angle after each shot and that it takes 5 seconds to go
-math = require("math")
+local math = require("math")
 local sin(), cos(), tan(), asin(), acos(), atan(), rad(), abs(), sqrt(), deg(), floor(), ceil(), atan2() = math.sin(), math.cos(), math.tan(), math.asin(), math.acos(), math.atan(), math.rad(), math.abs(), math.sqrt(), math.deg(), math.floor(), math.ceil(), math.atan2()
 local function round(n)
     if ceil(n)-n>abs(floor(n)) then
@@ -15,28 +15,28 @@ print("Scanning for data file")
 if fs.exists("/data/artillery.txt") then
     print("File found")
     datafile = io.open("/data/artillery.txt","r+")
-    x = tonumber(datafile:read("l"))
+    local x = tonumber(datafile:read("l"))
     print(x)
-    y = tonumber(datafile:read("l"))
+    local y = tonumber(datafile:read("l"))
     print(y)
-    z = tonumber(datafile:read("l"))
+    local z = tonumber(datafile:read("l"))
     print(z)
-    length = tonumber(datafile:read("l"))
+    local length = tonumber(datafile:read("l"))
     print(length)
-    v = tonumber(datafile:read("l"))
+    local v = tonumber(datafile:read("l"))
     print(v)
     datafile:close()
     goto datadone
 end
 ::reask::
 print("What is the X co-ordinate of the cannon's elevation actuation point?")
-x = tonumber(read())
+local x = tonumber(read())
 print("What is the Y co-ordinate of the cannon's elevation actuation point?")
-y = tonumber(read())
+local y = tonumber(read())
 print("What is the Z co-ordinate of the cannon's elevation actuation point?")
-z = tonumber(read())
+local z = tonumber(read())
 print("The co-ordinates of the cannon's elevation actuation point is ("..x..","..y..","..z.."). Is this correct? (Y/N)")
-answer = read()
+local answer = read()
 ::recorrect::
 if answer == "N" then
     goto reask
