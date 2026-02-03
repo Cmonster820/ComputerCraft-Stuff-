@@ -4,7 +4,7 @@ local io = require("io")
 local fs = require("fs")
 local math = require("math") 
 local bit32 = require("bit32")
-local lshift(), rshift(), bor() = bit32.lshift(), bit32.rshift(), bit32.bor()
+local lshift(), rshift(), bor(), band() = bit32.lshift(), bit32.rshift(), bit32.bor(), bit32.band()
 local function getbytes(str, start, endi)
     local bytes = {string.byte(str,start,endi)}
     local out = 0
@@ -20,10 +20,10 @@ local function parseStreamInfo(Block)
     local minFrameSize = getbytes(Block,5,7)
     local maxFrameSize = getbytes(Block,8,10)
     local rate = rshift(getbytes(Block,11,13),4)
-    local channels = rshift(lshift(getbytes(Block,13,13),4),5)
-    local bitsPsample = ((getbytes(Block,13,13)%2)*16)+(rshift(getbytes(Block,14,14),4))
-    local totalInterchannelSamples = rshift(lshift(getbytes(Block,14,18),4),4)
-    local MD5Checksum = getbytes(Block,19)
+    local channels = rshift(lshift(getbytes(Block,13,13),4),5)+1
+    local bitsPsample = ((getbytes(Block,13,13)%2)*16)+(rshift(getbytes(Block,14,14),4))+1
+    local totalInterchannelSamples = band(getbytes(Block, 14, 18), 0x0FFFFFFFFF)
+    local MD5Checksum = string.sub(Block,19,34)
     return minSize,maxSize,minFrameSize,maxFrameSize,rate,channels,bitsPsample,totalInterchannelSamples,MD5Checksum
 end
 local function parseBlockHeader(header)
