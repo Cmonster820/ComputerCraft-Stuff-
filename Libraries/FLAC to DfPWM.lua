@@ -4,7 +4,7 @@ local io = require("io")
 local fs = require("fs")
 local math = require("math") 
 local bit32 = require("bit32")
-local function parseStreamInfo(blockHeader)
+local function parseStreamInfo(Block)
 
 end
 local function parseBlockHeader(header)
@@ -14,6 +14,7 @@ local function main.convertFile(pathIn, pathOut)
     local fileIn = io.open(pathIn, "r+")
     local signature = fileIn:read(4)
     assert(signature=="fLaC", "Not of type fLaC") --Check file signature for correct thing
-    local info = fileIn:read(34)
+    local StreamInfo = fileIn:read(34)
+    local minSize, maxSize, minFrameSize, rate, channels, bitsPsample, totalInterchannelSamples, MD5Checksum =parseStreamInfo(StreamInfo)
 end
 return main
