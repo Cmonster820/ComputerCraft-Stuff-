@@ -18,6 +18,10 @@ end
 local function getBit(byte,bit)
     return rshift(lshift(byte,bit-1),7)
 end
+local function decodeRice(file, k)
+    local zeroCount = 0
+    
+end
 local function parseStreamInfo(Block)
     local minSize = getbytes(Block, 1,2)
     local maxSize = getbytes(Block, 3,4)
