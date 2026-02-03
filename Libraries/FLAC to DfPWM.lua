@@ -4,16 +4,26 @@ local io = require("io")
 local fs = require("fs")
 local math = require("math") 
 local bit32 = require("bit32")
-local lshift(), rshift() = bit32.lshift(), bit32.rshift()
+local lshift(), rshift(), bor() = bit32.lshift(), bit32.rshift(), bit32.bor()
+local function getbytes(str, start, endi)
+    local bytes = {string.byte(str,start,endi)}
+    local out = 0
+    for i = 1, #bytes-1 do
+        out = bor(out,lshift(bytes[#bytes],8))
+    end
+    out = bor(out,bytes[#bytes])
+    return out
+end
 local function parseStreamInfo(Block)
-    local minSize = tonumber(string.sub(Block, 1,2))
-    local maxSize = tonumber(string.sub(Block, 3,4))
-    local minFrameSize = tonumber(string.sub(Block,5,7))
-    local maxFrameSize = tonumber(string.sub(Block,8,10))
-    local rate = rshift(tonumber(string.sub(Block,11,13)),4)
-    local channels = rshift(lshift(tonumber(string.sub(Block,13,13)),4),5)
-    local bitsPsample = ((tonumber(string.sub(Block,13,13))%2)*16)+(rshift(tonumber(string.sub(Block,14,14)),4))
-    
+    local minSize = getbytes(Block, 1,2)
+    local maxSize = getbytes(Block, 3,4)
+    local minFrameSize = getbytes(Block,5,7)
+    local maxFrameSize = getbytes(Block,8,10)
+    local rate = rshift(getbytes(Block,11,13),4)
+    local channels = rshift(lshift(getbytes(Block,13,13),4),5)
+    local bitsPsample = ((getbytes(Block,13,13)%2)*16)+(rshift(getbytes(Block,14,14),4))
+    local bistPsample = rshift(lshift(getbytes(Block,14,18),4),4)
+    local MD5Checksum = getbytes(Block,19)
 end
 local function parseBlockHeader(header)
 
