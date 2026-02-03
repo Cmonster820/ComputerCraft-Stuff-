@@ -22,8 +22,9 @@ local function parseStreamInfo(Block)
     local rate = rshift(getbytes(Block,11,13),4)
     local channels = rshift(lshift(getbytes(Block,13,13),4),5)
     local bitsPsample = ((getbytes(Block,13,13)%2)*16)+(rshift(getbytes(Block,14,14),4))
-    local bistPsample = rshift(lshift(getbytes(Block,14,18),4),4)
+    local totalInterchannelSamples = rshift(lshift(getbytes(Block,14,18),4),4)
     local MD5Checksum = getbytes(Block,19)
+    return minSize,maxSize,minFrameSize,maxFrameSize,rate,channels,bitsPsample,totalInterchannelSamples,MD5Checksum
 end
 local function parseBlockHeader(header)
 
