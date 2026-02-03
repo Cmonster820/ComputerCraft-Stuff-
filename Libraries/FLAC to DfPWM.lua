@@ -9,7 +9,7 @@ local function getbytes(str, start, endi)
     local bytes = {string.byte(str,start,endi)}
     local out = 0
     for i = 1, #bytes-1 do
-        out = bor(out,lshift(bytes[#bytes],8))
+        out = bor(out,lshift(bytes[i],8))
     end
     out = bor(out,bytes[#bytes])
     return out
