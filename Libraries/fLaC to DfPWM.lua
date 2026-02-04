@@ -72,7 +72,7 @@ local function readFrame(file, channels, bitsPsample, minSize, maxSize, minFrame
         assert(getBit(subFheader,1)==0, "Error: I genuinely don't know how this can happen but something's up with the audio\nverbose:\nsubframe header padding bit is 1")
         local typecode = rshift(lshift(subFheader,1),2)
         local wasted = getBit(subFheader,8)
-        local sFtype
+        local sFtype = ""
         if typecode == 0 then
             sFtype = "const"
         elseif typecode == 1 then
