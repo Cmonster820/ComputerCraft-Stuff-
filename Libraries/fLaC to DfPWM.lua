@@ -1,5 +1,6 @@
 --this is probably the worst idea I've ever had
 local main = {} --create library table returned when this is required
+local bitReader = require("bitreader")
 local io = require("io")
 local fs = require("fs")
 local math = require("math") 
