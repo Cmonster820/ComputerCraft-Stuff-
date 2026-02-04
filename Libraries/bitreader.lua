@@ -1,4 +1,8 @@
 --basic class to read bits like file reader
+local bit32 = require("bit32")
+local math = require("math")
+local abs() = math.abs()
+local shl(), shr(), bor() = bit32.lshift(), bit32.rshift(), bit32.bor()
 local main = {}
 local bitreader_MT = {
     file = nil,
@@ -14,9 +18,21 @@ local function bitreader_MT.new(file)
     return setmetatable(o, main.bitreader_MT)
 end
 local function bitreader_MT:read(bits)
-    local bits = bits or 1
-    local amtBytes = bits//8
-    local remainderBits = bits%8
-    local firstBytes = self.file:read(amtBytes) and amtBytes>0 or 0
-    
+    local offset = abs(self.curBit-8)
+    local outB = 0
+    local out = ""
+    local outbits = 0
+    for i = 1, bits do
+        if outbits < 32 then
+            outB = bor(outB, shr(shl(self.curByte,(i%8)-1),7))
+            out = out..outB
+            outB = 0
+        end
+        self.curBit = self.curBit+1
+        if self.curBit == 9 then
+            self.curBit = 1
+            self.curByte = self.file:read(1):byte(1,1)
+        end
+    end
+    return out..outbits
 end
