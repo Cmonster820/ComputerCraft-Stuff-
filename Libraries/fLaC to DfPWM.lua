@@ -48,7 +48,7 @@ local function skipToAudio(file)
         os.pullEvent("yield")
     end
 end
-local function readFrameHeader(file, channels)
+local function readFrameHeader(file, channels, bitsPsample, minSize, maxSize, minFrameSize, maxFrameSize, totalInterchannelSamples, rate)
     local headerBytes = file:read(2)
     local b1, b2 = string.byte(headerBytes,1,2)
     assert(b1 == 0xFF and band(b2, 0xFC) == 0xF8, "Error, sync lost. Conversion failure.")
@@ -87,7 +87,7 @@ local function main.convertFile(pathIn, pathOut)
     local fileOut = fs.open(pathOut, "wb")
     while do
         local encoder = dfpwm.make_encoder()
-        local data = readFrameHeader(file, channels)
+        local data = readFrameHeader(file, channels, bitsPsample, minSize, maxSize, minFrameSize, maxFrameSize, totalInterchannelSamples, rate)
         local fileOut.write(encoder(data))
         os.queueEvent("yield")
         os.pullEvent("yield")
