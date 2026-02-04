@@ -20,19 +20,13 @@ end
 local function bitreader_MT:read(bits)
     local offset = abs(self.curBit-8)
     local outB = 0
-    local out = ""
-    local outbits = 0
     for i = 1, bits do
-        if outbits < 32 then
-            outB = bor(outB, shr(shl(self.curByte,(i%8)-1),7))
-            out = out..outB
-            outB = 0
-        end
+        outB = bor(outB, shr(shl(self.curByte,(i%8)-1),7))
         self.curBit = self.curBit+1
         if self.curBit == 9 then
             self.curBit = 1
             self.curByte = self.file:read(1):byte(1,1)
         end
     end
-    return out..outbits
+    return outB
 end
