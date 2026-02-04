@@ -10,7 +10,7 @@ local bitreader_MT = {
     curByte = 0
 }
 main.bitreader = bitreader_MT
-local function bitreader_MT.new(file)
+local function main.new(file)
     local o = {}
     o.file = file
     o.curBit = 0

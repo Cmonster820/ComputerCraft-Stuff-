@@ -66,6 +66,7 @@ local function readFrameHeader(file, channels, bitsPsample, minSize, maxSize, mi
     local blockSizeIdx = rshift(band(b3,0x73),3)
     local sampleRateIdx = band(b3,0x0F)
     local sample = ""
+    local reader = bitreader.new(file)
     for i=1,channels do
         local subFheader = file:read(1):byte()
         assert(getBit(subFheader,1)==0, "Error: I genuinely don't know how this can happen but something's up with the audio\nverbose:\nsubframe header padding bit is 1")
