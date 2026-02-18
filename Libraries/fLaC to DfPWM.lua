@@ -86,6 +86,8 @@ local function readFrame(file, channels, bitsPsample, minSize, maxSize, minFrame
         else
             error("Invalid subframe type code: "..tostring(typecode))
         end
+        os.queueEvent("yield")
+        os.pullEvent("yield")
     end
 end
 local function main.convertFile(pathIn, pathOut)
