@@ -1,4 +1,8 @@
 --this is probably the worst idea I've ever had
+--------------
+--DEPRECATED
+--NOT DEVELOPING ANYMORE
+--------------
 local main = {} --create library table returned when this is required
 local bitReader = require("bitreader")
 local io = require("io")
