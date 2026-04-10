@@ -17,7 +17,7 @@ end
 local function parseHeader(header)
     local ckID = header:sub(1,4)
     local cksize = getbytes(header,5,9)
-    local WAVEID
+    local WAVEID = header:sub(10,14)
 
 end
 
